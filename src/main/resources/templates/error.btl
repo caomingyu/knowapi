@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
+<body>
+<div>
+    用户${user!}没有权限:${msg!}
+</div>
+
+<script type="text/javascript" src="../js/jquery-3.4.0.min.js"></script>
+<script>
+    $(function () {
+        var msg = "${msg!}";
+        if (msg) {
+            console.log("msg: " + msg)
+        }
+    });
+</script>
+</body>
+</html>

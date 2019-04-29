@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>${systemName!"后台管理系统"}</title>
+    <meta name="description" content="${systemName!'后台管理系统'}">
+
+    <link rel="stylesheet" href="../../layui/css/layui.css"/>
+</head>
+
+<body>
+<div class="layui-card">
+    <form class="layui-card-body layui-form layui-form-pane" action="" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色</label>
+            <div class="layui-input-block" id="roles"></div>
+        </div>
+        <div class="layui-form-item">
+            <button lay-filter="role-submit" class="layui-btn layui-btn-fluid" lay-submit>提交</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="../../layui/layui.js"></script>
+
+<script type="text/javascript">
+    var Feng = {
+        ctxPath: "",
+    };
+</script>
+
+<!--其他插件js-->
+<script type="text/javascript" src="../../js/jquery-3.4.0.min.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+
+<script type="text/javascript">
+    layui.use(['form', 'selectM'], function () {
+        var form = layui.form;
+        var selectM = layui.selectM;
+        debugger;
+        var tagData = {};
+        var chose = {};
+        var tagIns2;
+        $.ajax({
+            url: "/role/roleList",
+            type: "post",
+            data: {"uid": "${uid}"},
+            success: function (info) {
+                var result = JSON.parse(info);
+                debugger;
+                console.log(result);
+                tagData = result.result.roles;
+                chose = result.result.chose;
+                console.log(tagData + "  " + chose);
+
+                tagIns2 = selectM({
+                    //元素容器【必填】
+                    elem: '#roles'
+                    //候选数据【必填】
+                    , data: tagData
+                    //默认值
+                    , selected: chose
+                    //最多选中个数，默认5
+                    , max: 6
+                    //input的name 不设置与选择器相同(去#.)
+                    //值的分隔符
+                    , delimiter: ','
+                    //候选项数据的键名
+                    , field: {idName: 'id', titleName: 'description'}
+                });
+            },
+            error: function (info) {
+                console.log(info)
+            }
+        });
+        form.on('submit(role-submit)', function (data) {
+            debugger;
+            console.log('tagIns1 当前选中的值名：', tagIns2.selected);
+            console.log('tagIns1 当前选中的值：', tagIns2.values);
+            console.log('tagIns1 当前选中的名：', tagIns2.names);
+            console.log('');
+            var formData = data.field;
+            console.log('表单对象：', formData);
+
+            debugger;
+
+            $.ajax({
+                url: "/role/bind_user_role",
+                type: "post",
+                data: {"uid": "${uid}", "rid": formData.roles},
+                success: function (info) {
+                    var result = JSON.parse(info);
+                    debugger;
+                    console.log(result);
+                    layer.msg(result.msg, {
+                        icon: 1, time: 2000, end: function () {
+                            var index = parent.layer.getFrameIndex(window.name); // 先得到当前 iframe 层的索引
+                            parent.layer.close(index); // 再执行关闭
+                        }
+                    });
+                },
+                error: function (info) {
+                    console.log(info)
+                }
+            });
+            return false;
+        })
+    });
+</script>
+
+</body>
+
+</html>

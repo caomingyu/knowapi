@@ -1,0 +1,42 @@
+<%
+include("../common/_container.btl"){}
+%>
+<script type="text/javascript" src="../../modular/system/exception/exception_info.js"></script>
+<div class="layui-body-header">
+    <span class="layui-body-header-title">异常提交审核管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="name" class="layui-input" type="text" placeholder="异常编码/提交人"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="exceptionTable" lay-filter="exceptionTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="showDetail">查看详细内容</a>
+</script>
+
+<script type="text/html" id="statusTpl">
+    <input type="checkbox" lay-filter="status" value="{{d.eid}}" lay-skin="switch" lay-text="已通过|未通过"
+           {{d.state==1?'checked':''}}/>
+</script>

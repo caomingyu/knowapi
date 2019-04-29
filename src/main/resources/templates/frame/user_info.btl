@@ -1,0 +1,118 @@
+<%
+include("../common/_container.btl"){}
+%>
+<link rel="stylesheet" type="text/css" href="../../modular/frame/user_info.css"/>
+<script type="text/javascript" src="../../modular/frame/user_info.js"></script>
+<div class="layui-body-header">
+    <span class="layui-body-header-title">个人中心</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="/system/welcome">首页</a>
+        <a><cite>个人中心</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <!-- 左 -->
+        <div class="layui-col-sm12 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-body" style="padding: 25px;">
+                    <div class="text-center layui-text">
+                        <div class="user-info-head" id="imgHead">
+                            <img src="../../images/logo.png"/>
+                        </div>
+                        <h2 style="padding-top: 20px;">${name!}</h2>
+                        <p style="padding-top: 8px;">${roleName!} ${deptName!}</p>
+                    </div>
+                    <div class="layui-text" style="padding-top: 30px;">
+                        <div class="info-list-item">
+                            <i class="layui-icon layui-icon-notice"></i>
+                            <p>${email!"cmy**mm.163.com"}</p>
+                        </div>
+
+                        <div class="info-list-item">
+                            <i class="layui-icon layui-icon-cellphone"></i>
+                            <p>${phone!"188****2266"}</p>
+                        </div>
+                    </div>
+                    <div class="dash"></div>
+                    <h3>标签</h3>
+                    <div class="layui-badge-list" style="padding-top: 6px;">
+                        <span class="layui-badge layui-bg-gray">${roleName}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 右 -->
+        <div class="layui-col-sm12 layui-col-md9">
+            <div class="layui-card">
+                <div class="layui-card-body layui-text">
+
+                    <div class="layui-tab layui-tab-brief" lay-filter="userInfoTab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">基本信息</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-form layui-tab-item layui-show" lay-filter="userInfoForm">
+                                <input type="hidden" name="userId"/>
+                                <div class="layui-form user-info-form" style="max-width: 400px;padding-top: 25px;">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">账号:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="account" class="layui-input" lay-verify="required"
+                                                   disabled/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">性别:</label>
+                                        <div class="layui-input-block">
+                                            <input type="radio" name="sex" value="男" title="男" checked="">
+                                            <input type="radio" name="sex" value="女" title="女">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">邮箱:<span style="color: red;">*</span></label>
+                                        <div class="layui-input-block">
+                                            <input type="email" name="email" class="layui-input"
+                                                   lay-verify="required|email" required/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">姓名:<span style="color: red;">*</span></label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="name" class="layui-input" lay-verify="required"
+                                                   required/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">出生日期:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="birthday" name="birthDay" class="layui-input"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">联系电话:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="phone" class="layui-input"
+                                                   lay-verify="required|phone"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <button class="layui-btn" lay-filter="userInfoSubmit" lay-submit>
+                                                更新基本信息
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

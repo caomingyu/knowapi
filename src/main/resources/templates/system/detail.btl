@@ -1,0 +1,16 @@
+<%
+include("../common/_container.btl"){}
+%>
+<div class="layui-body-header">
+    <span class="layui-body-header-title">详细界面展示</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="">
+            <div class="layui-card">
+                ${detail.content}
+            </div>
+        </div>
+    </div>
+</div>

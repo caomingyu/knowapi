@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmy.knowapi.mapper.MenuMapper">
+    <select id="findMenuByRoleId" resultType="Menu">
+        SELECT m.* FROM sys_menu as m LEFT JOIN sys_role_menu as rm ON rm.mid=m.id LEFT JOIN sys_role as r on r.id =rm.rid where r.id=#{rid} order by m.order_;
+    </select>
+</mapper>

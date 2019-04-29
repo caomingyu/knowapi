@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmy.knowapi.mapper.UserMapper">
+    <select id="findRole" resultType="Role">
+select r.*
+from sys_role as r left join sys_user_role as ur on r.id=ur.rid left join sys_user u on u.id=ur.uid where u.id=#{uid};
+</select>
+</mapper>
