@@ -1,10 +1,8 @@
 package com.cmy.knowapi.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cmy.knowapi.model.Menu;
-import com.cmy.knowapi.model.Role;
-import com.cmy.knowapi.model.User;
-import com.cmy.knowapi.model.UserInfo;
+import com.cmy.knowapi.model.*;
+import com.cmy.knowapi.service.ExceptionService;
 import com.cmy.knowapi.service.UserService;
 import com.cmy.knowapi.util.Md5Util;
 import com.cmy.knowapi.util.ShiroSaltUtil;
@@ -19,16 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @Slf4j
 public class LoginController {
     @Autowired
     UserService userService;
+    @Autowired
+    ExceptionService exceptionService;
 
     @GetMapping("/login")
     public String login(Map<String, Object> map) {
@@ -83,12 +80,14 @@ public class LoginController {
     @GetMapping({"/", "/index"})
     public String index(Map<String, Object> map) {
         Subject subject = SecurityUtils.getSubject();
+        List<ExceptionInfo> exceptionInfos = exceptionService.findExceptionList();
         if (subject.isAuthenticated()) {
             String userName = (String) subject.getPrincipal();
             map.put("user", userName);
             User user = userService.findUserByName(userName);
             if (user != null) {
                 if (userService.checkisNormalUser(user)) {
+                    map.put("curUser", user);
                     return "index.btl";
                 }
                 Set<Menu> menuList = new HashSet<>();
@@ -104,13 +103,13 @@ public class LoginController {
         }
     }
 
-    @RequestMapping("regist")
+    @RequestMapping("/regist")
     public String regist() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             return "redirect:/";
         }
-        return "user_add.btl";
+        return "/regist.btl";
     }
 
     @PostMapping("/doRegist")

@@ -15,11 +15,13 @@ public class SystemException {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "code")
-    private Integer exceptionCode;
-    @Column(name = "flow_type")
+    private String exceptionCode;
+    @Column(name = "flow_code")
     private String flowType;
     @Column(name = "exception_type")
     private String exceptionType;
     @Column(name = "state")
     private Integer state;
+    @Column(name = "isFinish")
+    private Integer isFinish;
 }

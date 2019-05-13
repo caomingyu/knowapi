@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="test1" action="/test/list" method="post">
+    <input type="text" name="users[0].id" value="1">
+    <input type="text" name="users[0].userName" value="2">
+    <input type="text" name="users[0].password" value="3">
+    <input type="text" name="users[0].salt" value="4">
+    <input type="text" name="users[0].state" value="5">
+    <input type="submit" id="zzz" value="提交">
+</form>
+
+<div>
+    <span id="test">dasldjlas</span>
+</div>
+
+
+<script src="/js/jquery-3.4.0.min.js"></script>
+
+
+
+<script>
+    debugger;
+    console.log($("#test").text());
+
+    $("#test1").submit(function () {
+        debugger;
+        var params = jQuery('#test1').serialize();
+        params = decodeURIComponent(params, true);
+        console.log(params);
+        return true;
+    });
+
+    // var size = $("#size").val();
+
+
+    function getOption(params) {
+        debugger;
+        var params = params;
+        var paramNum = params.split("&");
+        var ret = "";
+        for (var i = 0; i < size; i++) {
+            var str = "answers[" + i + "].answer";
+            if (params.indexOf(str) != -1) {
+                continue;
+            }
+            str = "answers[" + i + "].subject_id"
+            var num = retIndex(paramNum, str) - 1;
+            var temp = paramNum[num];
+            var varNum = temp.substr(0, temp.indexOf("="));
+            var array = varNum.split("");
+            var tempStr = "";
+            for (number_ in array) {
+                var o1 = "#number" + number_;
+                var o2 = "#content" + number_;
+                tempStr = tempStr + ";" + $(o1).val() + $(o2).val();
+            }
+            ret = ret + "|" + i + "_" + tempStr;
+        }
+        return ret;
+    }
+
+    function retIndex(num, str) {
+        debugger;
+        var num = num;
+        var str = str;
+        for (var i = 0; i < num.length; i++) {
+            if (num[i].indexOf(str) != -1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+</script>
+</body>
+</html>

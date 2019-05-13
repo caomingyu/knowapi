@@ -21,7 +21,7 @@
         </li>
         <li class="layui-nav-item" lay-unselect>
             <a>
-                <img src="../../images/logo.png" class="layui-nav-img">
+                <img src="../../images/head.png" class="layui-nav-img">
                 <cite>${user!"用户"}</cite>
             </a>
             <dl class="layui-nav-child">

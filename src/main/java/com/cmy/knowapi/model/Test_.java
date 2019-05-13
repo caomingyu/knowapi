@@ -5,12 +5,9 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Data
-@Table(name = "test")
 public class Test_ {
-    @Id
-    private Integer id;
-    @Column(name = "test")
-    private String test;
+    private List<User> users;
 }

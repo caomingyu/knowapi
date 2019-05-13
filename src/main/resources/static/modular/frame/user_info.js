@@ -1,9 +1,7 @@
-layui.use(['form', 'upload', 'element', 'ax', 'laydate', 'util'], function () {
+layui.use(['form', 'upload','laydate', 'util'], function () {
     var $ = layui.jquery;
     var form = layui.form;
     var upload = layui.upload;
-    var element = layui.element;
-    var $ax = layui.ax;
     var laydate = layui.laydate;
     var util = layui.util;
 

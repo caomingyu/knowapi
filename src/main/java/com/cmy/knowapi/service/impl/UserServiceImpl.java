@@ -107,7 +107,9 @@ public class UserServiceImpl implements UserService {
     public UserInfo findUserInfoByName(String userName) {
         User user = findUserByName(userName);
         if (user != null) {
-            return userInfoMapper.selectByPrimaryKey(user.getId());
+            Integer udid = userInfoMapper.selectUdidByUid(user.getId());
+            UserInfo userInfo = userInfoMapper.selectByPrimaryKey(udid);
+            return userInfo;
         }
         return null;
     }

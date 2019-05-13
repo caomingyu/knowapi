@@ -18,6 +18,7 @@ public class ExceptionInfo {
     private String content;
     @Column(name = "author")
     private String author;
+    private String title;
     @Column(name = "create_time")
     private Date createTime;
     @Column(name = "pass_time")
@@ -32,6 +33,12 @@ public class ExceptionInfo {
     private Integer state;
     @Transient
     private Integer eid;
+    //    @Transient
+    private Integer fid;
+    //    @Transient
+    private Integer tid;
+    @Transient
+    private Integer isFinish;
     @Transient
     private List<AnswerInfo> answerInfoList;
 }

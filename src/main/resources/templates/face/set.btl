@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>账号设置</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1168436_0efndpovvzb.css">
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../../modular/frame/user_info.css"/>
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+        <a class="fly-logo" href="/">
+            <!--            <i class="icon-library"></i>-->
+            <span style="color: white;font-size: 24px">异常知识库</span>
+        </a>
+        <ul class="layui-nav fly-nav-user">
+
+            <!-- 未登入的状态 -->
+            <% if(isEmpty(curUser)){%>
+            <li class="layui-nav-item">
+                <a class="iconfont icon-touxiang layui-hide-xs" href="/login"></a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/login">登入</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/regist">注册</a>
+            </li>
+            <%}else{ %>
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+                <a class="fly-nav-avatar" href="javascript:;">
+                    <cite class="layui-hide-xs">${curUser.userName}</cite>
+                    <img src="../../images/head.png">
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                    <dd><a href="/face/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a>
+                    </dd>
+                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>
+                    </dd>
+                    <hr style="margin: 5px 0;">
+                    <dd><a href="/logout" style="text-align: center;">退出</a></dd>
+                </dl>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop fly-user-main">
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+        <li class="layui-nav-item">
+            <a href="/face/user/home">
+                <i class="layui-icon">&#xe609;</i>
+                我的主页
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="/face/user/index">
+                <i class="layui-icon">&#xe612;</i>
+                用户中心
+            </a>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="/face/user/set">
+                <i class="layui-icon">&#xe620;</i>
+                基本设置
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="/face/user/message">
+                <i class="layui-icon">&#xe611;</i>
+                我的消息
+            </a>
+        </li>
+    </ul>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
+
+            <div class="layui-card">
+                <div class="layui-card-body layui-text">
+
+                    <div class="layui-tab layui-tab-brief" lay-filter="userInfoTab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">基本信息</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-form layui-tab-item layui-show" lay-filter="userInfoForm">
+                                <input type="hidden" name="userId"/>
+                                <div class="layui-form user-info-form" style="max-width: 400px;padding-top: 25px;">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">账号:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="account" class="layui-input" lay-verify="required"
+                                                   disabled/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">性别:</label>
+                                        <div class="layui-input-block">
+                                            <input type="radio" name="sex" value="男" title="男" checked="">
+                                            <input type="radio" name="sex" value="女" title="女">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">邮箱:<span style="color: red;">*</span></label>
+                                        <div class="layui-input-block">
+                                            <input type="email" name="email" class="layui-input"
+                                                   lay-verify="required|email" required/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">姓名:<span style="color: red;">*</span></label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="name" class="layui-input" lay-verify="required"
+                                                   required/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">出生日期:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="birthday" name="birthDay" class="layui-input"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">联系电话:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="phone" class="layui-input"
+                                                   lay-verify="required|phone"/>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <button class="layui-btn" lay-filter="userInfoSubmit" lay-submit>
+                                                更新基本信息
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="fly-footer">
+    <p><a href="/" target="_blank">知识库</a> 2019 &copy; <a href="http://www.layui.com/"
+                                                          target="_blank">曹明宇 出品</a></p>
+
+</div>
+
+<script src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../modular/frame/user_info.js"></script>
+<script>
+    layui.cache.page = '';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "1.0.0"
+        , base: '../../module/' //这里实际使用时，建议改成绝对路径
+    }).extend({
+        fly: 'user_index'
+    }).use('fly');
+</script>
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_30088308'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "w.cnzz.com/c.php%3Fid%3D30088308' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</body>
+</html>

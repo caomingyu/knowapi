@@ -1,19 +1,324 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <title>异常知识库首页</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>测试主页</title>
+    <meta name="keywords" content="异常，知识库">
+    <meta name="description" content="异常知识库提供了对已有异常的解决方案以及根据输入的异常信息，自动化推荐可行的解决方案">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1168436_0efndpovvzb.css">
+    <link rel="stylesheet" href="../css/global.css">
 </head>
-
 <body>
-<div>
-    <h1>前台主页</h1>
-    <div>
-        <a href="/login">模拟进行登录按钮，跳转登录界面</a>
+
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+        <a class="fly-logo" href="/">
+            <!--            <i class="icon-library"></i>-->
+            <span style="color: white;font-size: 24px">异常知识库</span>
+        </a>
+        <ul class="layui-nav fly-nav-user">
+
+            <!-- 未登入的状态 -->
+            <% if(isEmpty(curUser)){%>
+            <li class="layui-nav-item">
+                <a class="iconfont icon-touxiang layui-hide-xs" href="/login"></a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/login">登入</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/regist">注册</a>
+            </li>
+            <%}else{ %>
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+                <a class="fly-nav-avatar" href="javascript:;">
+                    <cite class="layui-hide-xs">${curUser.userName}</cite>
+                    <img src="../images/head.png">
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                    <dd><a href="/face/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a>
+                    </dd>
+                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>
+                    </dd>
+                    <hr style="margin: 5px 0;">
+                    <dd><a href="/logout" style="text-align: center;">退出</a></dd>
+                </dl>
+            </li>
+            <%}%>
+        </ul>
     </div>
 </div>
-</body>
 
+<div class="fly-panel fly-column">
+    <div class="layui-container">
+        <ul class="layui-clear">
+            <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
+            <!--            <li><a href="jie/index.html">提问</a></li>-->
+            <!--            <li><a href="jie/index.html">建议</a></li>-->
+            <li><a href="jie/index.html">公告</a></li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+
+            <%if(isNotEmpty(curUser)){%>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a>
+            </li>
+            <%}%>
+        </ul>
+
+        <div class="fly-column-right layui-hide-xs">
+            <span class="fly-search"><i class="layui-icon"></i></span>
+            <a href="/face/exception/add" class="layui-btn">发表新帖</a>
+        </div>
+    </div>
+</div>
+
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="fly-panel" style="margin-bottom: 0;">
+
+                <div class="fly-panel-title fly-filter">
+                    <a href="" class="layui-this">综合</a>
+                    <span class="fly-mid"></span>
+                    <a href="#" onclick="unFinish()">未结</a>
+                    <span class="fly-mid"></span>
+                    <a href="#" onclick="Finish()">已结</a>
+                    <span class="fly-mid"></span>
+                    <!--                    <a href="">精华</a>-->
+                    <span class="fly-filter-right layui-hide-xs">
+                    <a href="#" onclick="queryByTime()" id="queryByTime" class="layui-this">按最新</a>
+                    <span class="fly-mid"></span>
+                    <a href="#" onclick="queryByHot()" id="queryByHot" class="">按热议</a>
+                    </span>
+                </div>
+
+                <ul class="fly-list" id="lists">
+
+                </ul>
+                <div style="text-align: center">
+                    <div class="laypage-main">
+                        <a href="jie/index.html" class="laypage-next">更多求解</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+
+            <div class="fly-panel">
+                <h3 class="fly-panel-title">温馨通道</h3>
+                <ul class="fly-panel-main fly-list-static">
+                    <li>
+                        <a href="https://github.com/caomingyu/knowapi" target="_blank">GitHub仓库</a>
+                    </li>
+                    <li>
+                        <a href="#" target="_blank">
+                            layui 常见问题的处理和实用干货集锦
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
+                <h3 class="fly-panel-title">回贴周榜</h3>
+                <dl>
+                    <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇
+                            1</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇2</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇3</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇11</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇2</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇3</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇22</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇12</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇11</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇222</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇13</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="user/home.html">
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇14</cite><i>106次回答</i>
+                        </a>
+                    </dd>
+                </dl>
+            </div>
+
+            <dl class="fly-panel fly-list-one">
+                <dt class="fly-panel-title">本周热议</dt>
+                <dd>
+                    <a href="jie/detail.html">异常信息帖子-18</a>
+                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
+                </dd>
+                <dd>
+                    <a href="jie/detail.html">异常信息帖子-19</a>
+                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
+                </dd>
+                <dd>
+                    <a href="jie/detail.html">异常信息帖子-1</a>
+                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
+                </dd>
+                <dd>
+                    <a href="jie/detail.html">异常信息帖子-1</a>
+                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
+                </dd>
+                <dd>
+                    <a href="jie/detail.html">异常信息帖子-13</a>
+                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
+                </dd>
+                <dd>
+                    <a href="jie/detail.html">异常信息帖子-6</a>
+                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
+                </dd>
+                <dd>
+                    <a href="jie/detail.html">异常信息帖子-7</a>
+                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
+                </dd>
+
+                <!-- 无数据时 -->
+                <!--
+                <div class="fly-none">没有相关数据</div>
+                -->
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="fly-footer">
+    <p><a href="/" target="_blank">知识库</a> 2019 &copy; <a href="http://www.layui.com/"
+                                                          target="_blank">曹明宇 出品</a></p>
+
+</div>
+
+<script src="../layui/layui.js"></script>
+<script src="/js/jquery-3.4.0.min.js"></script>
+<script>
+    layui.cache.page = '';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "1.0.0"
+        , base: '../module/' //这里实际使用时，建议改成绝对路径
+    }).extend({
+        fly: 'user_index'
+    }).use('fly');
+
+    function getFormatDate(nowDate) {
+        var nowDate = new Date(nowDate);
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+        var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+        return year + "-" + month + "-" + date;
+    }
+
+    debugger;
+    var data = {};
+    data['orderBy'] = "create_time";
+    $.ajax({
+        url: "/home",
+        type: "post",
+        data: data,
+        success: function (info) {
+            debugger;
+            var result = JSON.parse(info);
+            var list = result.list;
+            for (var i = 0; i < list.length; i++) {
+                var data = getFormatDate(list[i].createTime);
+                var ans = list[i].answerCount;
+                if (list[i].answerCount == null) {
+                    ans = 0;
+                }
+                $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                    "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+            }
+        }
+    });
+
+    function queryByTime() {
+
+        location.href = "/";
+        return false;
+    }
+
+    function queryByHot() {
+        debugger;
+        var data = {};
+        data['finish'] = "";
+        $.ajax({
+            url: "/home",
+            type: "post",
+            data: data,
+            success: function () {
+
+            }
+        });
+        location.href = "/";
+        return false;
+    }
+
+    function unFinish() {
+
+    }
+
+    function Finish() {
+
+    }
+
+</script>
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_30088308'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "w.cnzz.com/c.php%3Fid%3D30088308' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</body>
 </html>

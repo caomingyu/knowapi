@@ -1,13 +1,16 @@
 package com.cmy.knowapi.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cmy.knowapi.model.ExceptionInfo;
-import com.cmy.knowapi.model.User;
-import com.cmy.knowapi.model.UserInfo;
+import com.cmy.knowapi.model.*;
 import com.cmy.knowapi.service.ExceptionService;
+import com.cmy.knowapi.service.FlowService;
+import com.cmy.knowapi.service.TypeService;
+import com.cmy.knowapi.service.UserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,12 @@ import java.util.Map;
 public class ExceptionInfoController {
     @Autowired
     ExceptionService exceptionService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    FlowService flowService;
+    @Autowired
+    TypeService typeService;
 
     @RequestMapping("/exception/list")
     @ResponseBody
@@ -84,4 +93,49 @@ public class ExceptionInfoController {
         map.put("detail", exceptionInfo);
         return "/system/detail.btl";
     }
+
+    @PostMapping("/exception/add")
+    @ResponseBody
+    public Object addException(Integer flowId, String code, Integer typeId, String title, String content, Map<String, Object> map) {
+
+        Map<String, Object> retMap = exceptionService.insertException(flowId, code, typeId, title, content);
+        if ((boolean) retMap.get("flag")) {
+            map.put("data", "true");
+            map.put("msg", "发布成功");
+            map.put("eid", retMap.get("eid"));
+        } else {
+            map.put("data", "flase");
+            map.put("msg", "发布失败");
+        }
+        return JSON.toJSONString(map);
+    }
+
+    @PostMapping("/exception/update")
+    @ResponseBody
+    public Object updateException(Integer eid, Integer id, Integer flowId, String code, Integer typeId, String title, String content, Map<String, Object> map) {
+        Map<String, Object> retMap = exceptionService.updateException(eid, id, flowId, code, typeId, title, content);
+        if ((boolean) retMap.get("flag")) {
+            map.put("data", "true");
+            map.put("msg", "发布成功");
+            map.put("eid", eid);
+        } else {
+            map.put("data", "flase");
+            map.put("msg", "发布失败");
+        }
+        return JSON.toJSONString(map);
+    }
+
+    @RequestMapping("/exception/show")
+    public String showException(Integer eid, Map<String, Object> map) {
+        ExceptionInfo exceptionInfo = exceptionService.findExceptionById(eid);
+        User user = userService.findUserByName((String) SecurityUtils.getSubject().getPrincipal());
+        List<SysFlow> flowLists = flowService.getFlowAll();
+        List<ExceptionType> typeLists = typeService.getTypeAll();
+        map.put("curUser", user);
+        map.put("flows", flowLists);
+        map.put("types", typeLists);
+        map.put("e", exceptionInfo);
+        return "/face/exception_show.btl";
+    }
+
 }
