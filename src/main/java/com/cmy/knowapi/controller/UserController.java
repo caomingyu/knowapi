@@ -107,4 +107,13 @@ public class UserController {
         map.put("uid", userId);
         return "/system/user_roleassign.btl";
     }
+
+    @PostMapping("/user/answerNum")
+    @ResponseBody
+    public Object userAnswerNum(Map<String, Object> map) {
+        List<UserInfo> userInfos = userService.selectUserInfoByAnswerNum();
+        map.put("data", "true");
+        map.put("list", userInfos);
+        return JSON.toJSONString(map);
+    }
 }

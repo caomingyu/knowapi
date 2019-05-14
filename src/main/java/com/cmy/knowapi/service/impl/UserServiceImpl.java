@@ -207,4 +207,10 @@ public class UserServiceImpl implements UserService {
     public List<Role> roleList(Integer uid) {
         return userMapper.findRole(uid);
     }
+
+    @Override
+    public List<UserInfo> selectUserInfoByAnswerNum() {
+        List<UserInfo> userInfos = userInfoMapper.selectUserInfoByAnswerNum(User.NORMAL_STATE);
+        return userInfos;
+    }
 }

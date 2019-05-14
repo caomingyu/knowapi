@@ -1,7 +1,10 @@
 package com.cmy.knowapi.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.cmy.knowapi.model.*;
+import com.cmy.knowapi.model.ExceptionInfo;
+import com.cmy.knowapi.model.ExceptionType;
+import com.cmy.knowapi.model.SysFlow;
+import com.cmy.knowapi.model.User;
 import com.cmy.knowapi.service.ExceptionService;
 import com.cmy.knowapi.service.FlowService;
 import com.cmy.knowapi.service.TypeService;
@@ -10,7 +13,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,4 +141,12 @@ public class ExceptionInfoController {
         return "/face/exception_show.btl";
     }
 
+    @PostMapping("/week/hot")
+    @ResponseBody
+    public Object weekHot(Map<String, Object> map) {
+        List<ExceptionInfo> exceptionInfos = exceptionService.selectExceptionInfoByWeek();
+        map.put("data", "true");
+        map.put("list", exceptionInfos);
+        return JSON.toJSONString(map);
+    }
 }

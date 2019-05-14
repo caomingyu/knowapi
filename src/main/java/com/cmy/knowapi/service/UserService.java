@@ -30,4 +30,6 @@ public interface UserService {
     boolean checkisNormalUser(User user);
 
     List<Role> roleList(Integer uid);
+
+    List<UserInfo> selectUserInfoByAnswerNum();
 }

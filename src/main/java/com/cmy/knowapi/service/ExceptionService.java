@@ -23,4 +23,6 @@ public interface ExceptionService {
     Map<String, Object> insertException(Integer flowId, String code, Integer typeId, String title, String content);
 
     Map<String, Object> updateException(Integer eid, Integer id, Integer flowId, String code, Integer typeId, String title, String content);
+
+    List<ExceptionInfo> selectExceptionInfoByWeek();
 }

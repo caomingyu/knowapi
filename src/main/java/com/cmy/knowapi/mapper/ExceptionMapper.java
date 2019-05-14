@@ -15,10 +15,10 @@ public interface ExceptionMapper extends MyMapper<SystemException> {
     @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state<>#{state}")
     List<ExceptionInfo> findExceptionList(@Param("state") Integer state);
 
-    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state<>#{state} and e.isFinish=#{param} order by ${orderBy} desc")
+    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state=#{state} and e.isFinish=#{param} order by ${orderBy} desc")
     List<ExceptionInfo> findExceptionListOrderBy(@Param("state") Integer state, @Param("orderBy") String orderBy, @Param("param") String param);
 
-    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state<>#{state} order by ${orderBy} desc")
+    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time ,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state=#{state} order by ${orderBy} desc")
     List<ExceptionInfo> findExceptionListOrderByNoParam(@Param("state") Integer state, @Param("orderBy") String orderBy);
 
 
@@ -39,4 +39,10 @@ public interface ExceptionMapper extends MyMapper<SystemException> {
 
     @Insert("insert into sys_exception_exceptionInfo(eid,eiid) values(#{eid},#{eiid})")
     void insertExceptionAndInfo(@Param("eid") Integer eid, @Param("eiid") Integer eiid);
+
+    @Select("select eiid from sys_exception_exceptionInfo where eid=#{eid}")
+    Integer selectIdByEid(@Param("eid") Integer eid);
+
+    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state=#{state} and pass_time BETWEEN current_date ()-7 and sysdate() ORDER BY answer_count DESC LIMIT 8")
+    List<ExceptionInfo> selectExceptionInfoByWeek(@Param("state") Integer state);
 }

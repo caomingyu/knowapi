@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="异常，知识库">
     <meta name="description" content="异常知识库提供了对已有异常的解决方案以及根据输入的异常信息，自动化推荐可行的解决方案">
-    <link rel="stylesheet" href="../layui/css/layui.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_1168436_0efndpovvzb.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
     <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="/css/pagination.css">
 </head>
 <body>
 
@@ -56,11 +57,11 @@
 <div class="fly-panel fly-column">
     <div class="layui-container">
         <ul class="layui-clear">
-            <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
+            <li id="index" class="layui-hide-xs layui-this"><a href="#" onclick="index_()">首页</a></li>
             <!--            <li><a href="jie/index.html">提问</a></li>-->
             <!--            <li><a href="jie/index.html">建议</a></li>-->
-            <li><a href="jie/index.html">公告</a></li>
-            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+            <li id="notice" class=""><a href="#" onclick="notice_()">公告</a></li>
+            <!--            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>-->
 
             <%if(isNotEmpty(curUser)){%>
             <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li>
@@ -82,29 +83,26 @@
             <div class="fly-panel" style="margin-bottom: 0;">
 
                 <div class="fly-panel-title fly-filter">
-                    <a href="" class="layui-this">综合</a>
+                    <a href="#" onclick="getAll_()" id="all" class="param layui-this">综合</a>
                     <span class="fly-mid"></span>
-                    <a href="#" onclick="unFinish()">未结</a>
+                    <a href="#" id="unFinish" onclick="unFinish()" class="param">未结</a>
                     <span class="fly-mid"></span>
-                    <a href="#" onclick="Finish()">已结</a>
+                    <a href="#" id="finish" onclick="Finish()" class="param">已结</a>
                     <span class="fly-mid"></span>
                     <!--                    <a href="">精华</a>-->
                     <span class="fly-filter-right layui-hide-xs">
-                    <a href="#" onclick="queryByTime()" id="queryByTime" class="layui-this">按最新</a>
+                    <a href="#" onclick="queryByTime()" id="queryByTime" class="by layui-this">按最新</a>
                     <span class="fly-mid"></span>
-                    <a href="#" onclick="queryByHot()" id="queryByHot" class="">按热议</a>
+                    <a href="#" onclick="queryByHot()" id="queryByHot" class="by">按热议</a>
                     </span>
                 </div>
 
                 <ul class="fly-list" id="lists">
 
                 </ul>
-                <div style="text-align: center">
-                    <div class="laypage-main">
-                        <a href="jie/index.html" class="laypage-next">更多求解</a>
-                    </div>
-                </div>
+
             </div>
+            <div id="pagination_12" style="margin: 0 auto;align-content: center"></div>
         </div>
         <div class="layui-col-md4">
 
@@ -122,108 +120,11 @@
                 </ul>
             </div>
             <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
-                <h3 class="fly-panel-title">回贴周榜</h3>
-                <dl>
-                    <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇
-                            1</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇2</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇3</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇11</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇2</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇3</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇22</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇12</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇11</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇222</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇13</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="user/home.html">
-                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"><cite>曹明宇14</cite><i>106次回答</i>
-                        </a>
-                    </dd>
-                </dl>
+
             </div>
 
-            <dl class="fly-panel fly-list-one">
-                <dt class="fly-panel-title">本周热议</dt>
-                <dd>
-                    <a href="jie/detail.html">异常信息帖子-18</a>
-                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                </dd>
-                <dd>
-                    <a href="jie/detail.html">异常信息帖子-19</a>
-                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                </dd>
-                <dd>
-                    <a href="jie/detail.html">异常信息帖子-1</a>
-                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                </dd>
-                <dd>
-                    <a href="jie/detail.html">异常信息帖子-1</a>
-                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                </dd>
-                <dd>
-                    <a href="jie/detail.html">异常信息帖子-13</a>
-                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                </dd>
-                <dd>
-                    <a href="jie/detail.html">异常信息帖子-6</a>
-                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                </dd>
-                <dd>
-                    <a href="jie/detail.html">异常信息帖子-7</a>
-                    <span><i class="iconfont icon-pinglun1"></i> 16</span>
-                </dd>
+            <dl id="weekhot" class="fly-panel fly-list-one">
 
-                <!-- 无数据时 -->
-                <!--
-                <div class="fly-none">没有相关数据</div>
-                -->
             </dl>
         </div>
     </div>
@@ -237,6 +138,8 @@
 
 <script src="../layui/layui.js"></script>
 <script src="/js/jquery-3.4.0.min.js"></script>
+<script src="/js/pagination.min.js"></script>
+
 <script>
     layui.cache.page = '';
     layui.cache.user = {
@@ -262,6 +165,50 @@
     }
 
     debugger;
+    $.ajax({
+        url: "/week/hot",
+        type: "post",
+        success: function (info) {
+            debugger;
+            var result = JSON.parse(info);
+            if (result.data == "true") {
+                $("#weekhot").empty();
+                var list = result.list;
+                $("#weekhot").append("<dt class=\"fly-panel-title\">本周热议</dt>");
+                for (var i = 0; i < list.length; i++) {
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#weekhot").append("<dd><a href=\"/exception/show?eid=" + list[i].eid + "\">" + list[i].title + "</a><span style='float: right'><i class=\"iconfont icon-pinglun1\"></i>" + ans + "</span></dd>")
+                }
+            }
+        }
+    });
+
+    $.ajax({
+        url: "/user/answerNum",
+        type: "post",
+        success: function (info) {
+            debugger;
+            var result = JSON.parse(info);
+            if (result.data == "true") {
+                $("#LAY_replyRank").empty();
+                var list = result.list;
+                $("#LAY_replyRank").append("<h3 class=\"fly-panel-title\">回贴榜</h3><dl>");
+                for (var i = 0; i < list.length; i++) {
+                    var ans = list[i].answerNum;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#LAY_replyRank").append("<dd><a href='user/home.html'><img src='/images/head/head_1.jpg'><cite" + list[i].account + "</cite><i>" + ans + "次回答</i></a></dd>")
+                }
+                $("#LAY_replyRank").append("</dl>");
+            }
+        }
+    })
+
+    debugger;
     var data = {};
     data['orderBy'] = "create_time";
     $.ajax({
@@ -282,39 +229,416 @@
                     "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                     "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
             }
+            $("#pagination_12").whjPaging({
+                css: 'css-2',
+                totalSize: result.pager.total,
+                totalPage: result.pager.pages,
+                // isShowSkip: false,
+                isShowRefresh: false,
+                pageSizeOpt: [
+                    {value: 10, text: '10条/页', selected: true},
+                    {value: 15, text: '15条/页'},
+                    {value: 20, text: '20条/页'}
+                ],
+                callBack: function (currPage, pageSize) {
+                    loadDate_(currPage, pageSize);
+                }
+            });
+
         }
     });
 
-    function queryByTime() {
+    function loadDate_(currPage, pageSize) {
+        debugger;
+        var data = {};
+        data['pageNum'] = currPage;
+        data['pageSize'] = pageSize;
+        var id = $(".param.layui-this").attr("id");
+        var id_ = $(".by.layui-this").attr("id");
+        if (id == "unFinish") {
+            data['finish'] = "0";
+        } else if (id == "finish") {
+            data['finish'] = "1";
+        }
+        if (id_ == "queryByTime") {
+            data['orderBy'] = "create_time";
+        } else if (id_ == "queryByHot") {
+            data['orderBy'] = "answer_count";
+        }
 
-        location.href = "/";
+        console.log('currPage:' + currPage + '     pageSize:' + pageSize);
+        $.ajax({
+            url: "/home",
+            type: "post",
+            data: data,
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.list;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                        "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                        "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+                }
+                $('html,body').animate({scrollTop: 0});
+            }
+        });
+    }
+
+    function queryByTime() {
+        debugger;
+
+        var data = {};
+        var id = $(".param.layui-this").attr("id");
+        $("#queryByHot").removeClass("layui-this");
+        $("#queryByTime").addClass("layui-this");
+        if (id == "unFinish") {
+            data['finish'] = "0";
+        } else if (id == "finish") {
+            data['finish'] = "1";
+        }
+        data['orderBy'] = "create_time";
+        $.ajax({
+            url: "/home",
+            type: "post",
+            data: data,
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.list;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                        "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                        "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+                }
+                $("#pagination_12").whjPaging({
+                    css: 'css-2',
+                    totalSize: result.pager.total,
+                    totalPage: result.pager.pages,
+                    // isShowSkip: false,
+                    isShowRefresh: false,
+                    pageSizeOpt: [
+                        {value: 10, text: '10条/页', selected: true},
+                        {value: 15, text: '15条/页'},
+                        {value: 20, text: '20条/页'}
+                    ],
+                    callBack: function (currPage, pageSize) {
+                        loadDate_(currPage, pageSize);
+                    }
+                });
+
+            }
+        });
         return false;
     }
 
     function queryByHot() {
         debugger;
+
         var data = {};
-        data['finish'] = "";
+        var id = $(".param.layui-this").attr("id");
+        $("#queryByTime").removeClass("layui-this");
+        $("#queryByHot").addClass("layui-this");
+        if (id == "unFinish") {
+            data['finish'] = "0";
+        } else if (id == "finish") {
+            data['finish'] = "1";
+        }
+        data['orderBy'] = "answer_count";
         $.ajax({
             url: "/home",
             type: "post",
             data: data,
-            success: function () {
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.list;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                        "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                        "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+                }
+                $("#pagination_12").whjPaging({
+                    css: 'css-2',
+                    totalSize: result.pager.total,
+                    totalPage: result.pager.pages,
+                    // isShowSkip: false,
+                    isShowRefresh: false,
+                    pageSizeOpt: [
+                        {value: 10, text: '10条/页', selected: true},
+                        {value: 15, text: '15条/页'},
+                        {value: 20, text: '20条/页'}
+                    ],
+                    callBack: function (currPage, pageSize) {
+                        loadDate_(currPage, pageSize);
+                    }
+                });
 
             }
         });
-        location.href = "/";
         return false;
     }
 
     function unFinish() {
+        debugger;
 
+        var data = {};
+        $("#finish").removeClass("layui-this");
+        $("#all").removeClass("layui-this");
+        $("#unFinish").addClass("layui-this");
+        var id = $(".by.layui-this").attr("id");
+
+        if (id == "queryByTime") {
+            data['orderBy'] = "create_time";
+        } else if (id == "queryByHot") {
+            data['orderBy'] = "answer_count";
+        }
+        data['finish'] = "0";
+        $.ajax({
+            url: "/home",
+            type: "post",
+            data: data,
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.list;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                        "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                        "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+                }
+                $("#pagination_12").whjPaging({
+                    css: 'css-2',
+                    totalSize: result.pager.total,
+                    totalPage: result.pager.pages,
+                    // isShowSkip: false,
+                    isShowRefresh: false,
+                    pageSizeOpt: [
+                        {value: 10, text: '10条/页', selected: true},
+                        {value: 15, text: '15条/页'},
+                        {value: 20, text: '20条/页'}
+                    ],
+                    callBack: function (currPage, pageSize) {
+                        loadDate_(currPage, pageSize);
+                    }
+                });
+
+            }
+        });
+        return false;
     }
 
     function Finish() {
+        debugger;
 
+        var data = {};
+        $("#unFinish").removeClass("layui-this");
+        $("#all").removeClass("layui-this");
+        $("#finish").addClass("layui-this");
+        var id = $(".by.layui-this").attr("id");
+
+        if (id == "queryByTime") {
+            data['orderBy'] = "create_time";
+        } else if (id == "queryByHot") {
+            data['orderBy'] = "answer_count";
+        }
+        data['finish'] = "1";
+        $.ajax({
+            url: "/home",
+            type: "post",
+            data: data,
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.list;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                        "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                        "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+                }
+                $("#pagination_12").whjPaging({
+                    css: 'css-2',
+                    totalSize: result.pager.total,
+                    totalPage: result.pager.pages,
+                    // isShowSkip: false,
+                    isShowRefresh: false,
+                    pageSizeOpt: [
+                        {value: 10, text: '10条/页', selected: true},
+                        {value: 15, text: '15条/页'},
+                        {value: 20, text: '20条/页'}
+                    ],
+                    callBack: function (currPage, pageSize) {
+                        loadDate_(currPage, pageSize);
+                    }
+                });
+
+            }
+        });
+        return false;
     }
 
+    function getAll_() {
+        debugger;
+
+        var data = {};
+        $("#finish").removeClass("layui-this");
+        $("#unFinish").removeClass("layui-this");
+        $("#all").addClass("layui-this");
+        var id = $(".by.layui-this").attr("id");
+
+        if (id == "queryByTime") {
+            data['orderBy'] = "create_time";
+        } else if (id == "queryByHot") {
+            data['orderBy'] = "answer_count";
+        }
+        $.ajax({
+            url: "/home",
+            type: "post",
+            data: data,
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.list;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                        "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                        "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+                }
+                $("#pagination_12").whjPaging({
+                    css: 'css-2',
+                    totalSize: result.pager.total,
+                    totalPage: result.pager.pages,
+                    // isShowSkip: false,
+                    isShowRefresh: false,
+                    pageSizeOpt: [
+                        {value: 10, text: '10条/页', selected: true},
+                        {value: 15, text: '15条/页'},
+                        {value: 20, text: '20条/页'}
+                    ],
+                    callBack: function (currPage, pageSize) {
+                        loadDate_(currPage, pageSize);
+                    }
+                });
+
+            }
+        });
+        return false;
+    }
+
+    function notice_() {
+        debugger;
+
+        $("#index").removeClass("layui-this");
+        $("#notice").addClass("layui-this");
+        $("#unFinish").hide();
+        $("#finish").hide();
+        $("#queryByHot").hide();
+        $(".fly-mid").hide();
+        $("#lists").empty();
+        for (var i = 0; i < 5; i++) {
+            $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + "zz" + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + "1" +
+                "'>" + "公告内容-----------" + i + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + "1" + ")' link><cite>" + "管理员" + "</cite></a><span>" + "2019-05-14" + "</span>" +
+                "</div></li>");
+        }
+        return false;
+    }
+
+    function index_() {
+        debugger;
+        $("#index").addClass("layui-this");
+        $("#notice").removeClass("layui-this");
+        $("#unFinish").show();
+        $("#finish").show();
+        $("#queryByHot").show();
+
+        var data = {};
+        var id = $(".param.layui-this").attr("id");
+        var id_ = $(".by.layui-this").attr("id");
+        if (id == "unFinish") {
+            data['finish'] = "0";
+        } else if (id == "finish") {
+            data['finish'] = "1";
+        }
+        if (id_ == "queryByTime") {
+            data['orderBy'] = "create_time";
+        } else if (id_ == "queryByHot") {
+            data['orderBy'] = "answer_count";
+        }
+        $.ajax({
+            url: "/home",
+            type: "post",
+            data: data,
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.list;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].answerCount;
+                    if (list[i].answerCount == null) {
+                        ans = 0;
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                        "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
+                        "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
+                }
+                $("#pagination_12").whjPaging({
+                    css: 'css-2',
+                    totalSize: result.pager.total,
+                    totalPage: result.pager.pages,
+                    // isShowSkip: false,
+                    isShowRefresh: false,
+                    pageSizeOpt: [
+                        {value: 10, text: '10条/页', selected: true},
+                        {value: 15, text: '15条/页'},
+                        {value: 20, text: '20条/页'}
+                    ],
+                    callBack: function (currPage, pageSize) {
+                        loadDate_(currPage, pageSize);
+                    }
+                });
+
+            }
+        });
+        return false;
+    }
 </script>
 
 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");

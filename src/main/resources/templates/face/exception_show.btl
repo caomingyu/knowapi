@@ -56,7 +56,10 @@
                 <ul class="layui-tab-title">
                     <li class="layui-this">查看帖子</li>
                     <span class="fly-mid"></span>
-                    <li id="edit" >编辑帖子</li>
+                    <%
+                    if(e.author==curUser.userName){%>
+                    <li id="edit">编辑帖子</li>
+                    <%}%>
                 </ul>
                 <div class="layui-tab-content" style="padding: 20px 0;">
                     <div class="layui-tab-item layui-show ">

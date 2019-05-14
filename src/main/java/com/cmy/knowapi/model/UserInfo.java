@@ -25,6 +25,9 @@ public class UserInfo {
     private Date birthDay;
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "answerNum")
+    private Integer answerNum;
     @Transient
     private Integer state;
     @Transient

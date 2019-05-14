@@ -38,11 +38,11 @@ public class ExceptionIServiceImpl implements ExceptionService {
 
     @Override
     public List<ExceptionInfo> findExceptionListOrderBy(String orderBy, String isFinish) {
-        List<ExceptionInfo> exceptionInfos = new ArrayList<>();
+        List<ExceptionInfo> exceptionInfos;
         if (isFinish == null) {
-            exceptionInfos = exceptionMapper.findExceptionListOrderByNoParam(SystemException.DELETE_STATE, orderBy);
-        }else {
-            exceptionInfos = exceptionMapper.findExceptionListOrderBy(SystemException.DELETE_STATE, orderBy, isFinish);
+            exceptionInfos = exceptionMapper.findExceptionListOrderByNoParam(SystemException.NORMAL_STATE, orderBy);
+        } else {
+            exceptionInfos = exceptionMapper.findExceptionListOrderBy(SystemException.NORMAL_STATE, orderBy, isFinish);
         }
         return exceptionInfos;
     }
@@ -72,6 +72,7 @@ public class ExceptionIServiceImpl implements ExceptionService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateStateById(Integer id, Integer state) {
         boolean isSucceed = false;
         SystemException exception = new SystemException();
@@ -80,6 +81,17 @@ public class ExceptionIServiceImpl implements ExceptionService {
         int row = exceptionMapper.updateByPrimaryKeySelective(exception);
         if (row == 1) {
             isSucceed = true;
+            ExceptionInfo exceptionInfo = new ExceptionInfo();
+            Integer eid = exceptionMapper.selectIdByEid(id);
+            if (state.equals(SystemException.NORMAL_STATE)) {
+                exceptionInfo.setId(eid);
+                exceptionInfo.setPassTime(new Date());
+                exceptionInfoMapper.updateByPrimaryKeySelective(exceptionInfo);
+            } else {
+                exceptionInfo = exceptionInfoMapper.selectByPrimaryKey(eid);
+                exceptionInfo.setPassTime(null);
+                exceptionInfoMapper.updateByPrimaryKey(exceptionInfo);
+            }
         }
         return isSucceed;
     }
@@ -163,5 +175,11 @@ public class ExceptionIServiceImpl implements ExceptionService {
         map.put("flag", ret);
 //        map.put("eid", eid);
         return map;
+    }
+
+    @Override
+    public List<ExceptionInfo> selectExceptionInfoByWeek() {
+        List<ExceptionInfo> exceptionInfos = exceptionMapper.selectExceptionInfoByWeek(SystemException.NORMAL_STATE);
+        return exceptionInfos;
     }
 }

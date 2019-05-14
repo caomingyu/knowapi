@@ -6,6 +6,9 @@ import com.cmy.knowapi.service.ExceptionService;
 import com.cmy.knowapi.service.FlowService;
 import com.cmy.knowapi.service.TypeService;
 import com.cmy.knowapi.service.UserService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -131,16 +134,20 @@ public class SystemController {
 
     @PostMapping("/home")
     @ResponseBody
-    public String toIndex(String finish, String orderBy, Map<String, Object> map) {
+    public String toIndex(Integer pageNum, Integer pageSize, String finish, String orderBy, Map<String, Object> map) {
         List<ExceptionInfo> exceptionInfos;
-        if (finish == null || "".equals(finish)) {
-            exceptionInfos = exceptionService.findExceptionListOrderBy(orderBy, finish);
-        } else if ("true".equals(finish)) {
-            exceptionInfos = exceptionService.findExceptionListOrderBy(orderBy, finish);
-        } else {
-            exceptionInfos = exceptionService.findExceptionListOrderBy(orderBy, finish);
+        if (pageNum == null) {
+            pageNum = 1;
         }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        Page page = PageHelper.startPage(pageNum, pageSize);
+        exceptionInfos = exceptionService.findExceptionListOrderBy(orderBy, finish);
+        PageInfo info = new PageInfo<>(page.getResult());
         map.put("list", exceptionInfos);
+        map.put("pager", info);
+        map.put("code", 0);
         return JSON.toJSONString(map);
     }
 

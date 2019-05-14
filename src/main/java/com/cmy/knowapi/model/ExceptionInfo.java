@@ -33,9 +33,9 @@ public class ExceptionInfo {
     private Integer state;
     @Transient
     private Integer eid;
-    //    @Transient
+        @Transient
     private Integer fid;
-    //    @Transient
+        @Transient
     private Integer tid;
     @Transient
     private Integer isFinish;

@@ -7,7 +7,7 @@ spring:
       filter:
         stat:
           log-slow-sql: true
-          slow-sql-millis: 200
+          slow-sql-millis: 1
 beetlsql:
   enabled: false
 beetl:
