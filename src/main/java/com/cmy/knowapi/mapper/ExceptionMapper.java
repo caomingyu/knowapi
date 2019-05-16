@@ -12,8 +12,11 @@ import java.util.List;
 
 @Repository
 public interface ExceptionMapper extends MyMapper<SystemException> {
-    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state<>#{state}")
+    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state<>#{state} order by create_time DESC")
     List<ExceptionInfo> findExceptionList(@Param("state") Integer state);
+
+    @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id left join sys_user_exception ue on e.id=ue.eid WHERE e.state<>#{state} and ue.uid=#{uid} order by create_time DESC")
+    List<ExceptionInfo> findMyExceptionList(@Param("state") Integer state,@Param("uid")Integer uid);
 
     @Select("SELECT e.id as eid,e.code as exceptionCode,e.flow_code as flowType,e.exception_type as exceptionType,e.state,ei.id,ei.content,ei.author,ei.create_time,ei.pass_time,ei.answer_count,ei.title FROM sys_exception_info as ei LEFT JOIN sys_exception_exceptionInfo as ee ON ee.eiid=ei.id LEFT JOIN sys_exception as e ON ee.eid=e.id WHERE e.state=#{state} and e.isFinish=#{param} order by ${orderBy} desc")
     List<ExceptionInfo> findExceptionListOrderBy(@Param("state") Integer state, @Param("orderBy") String orderBy, @Param("param") String param);

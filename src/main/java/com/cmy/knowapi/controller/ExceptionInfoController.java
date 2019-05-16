@@ -9,10 +9,12 @@ import com.cmy.knowapi.service.ExceptionService;
 import com.cmy.knowapi.service.FlowService;
 import com.cmy.knowapi.service.TypeService;
 import com.cmy.knowapi.service.UserService;
+import com.cmy.knowapi.util.SimilarityUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +22,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class ExceptionInfoController {
@@ -147,6 +150,31 @@ public class ExceptionInfoController {
         List<ExceptionInfo> exceptionInfos = exceptionService.selectExceptionInfoByWeek();
         map.put("data", "true");
         map.put("list", exceptionInfos);
+        return JSON.toJSONString(map);
+    }
+
+    @PostMapping("/my/exception")
+    @ResponseBody
+    public Object MyException(Integer uid, Map<String, Object> map) {
+        List<ExceptionInfo> exceptionInfos = exceptionService.findMyExceptionList(uid);
+        map.put("data", "true");
+        map.put("list", exceptionInfos);
+        return JSON.toJSONString(map);
+    }
+
+    @PostMapping("/exception/list/recommend")
+    @ResponseBody
+    public Object recommendException(String param, Map<String, Object> map) {
+        long start = System.currentTimeMillis();
+        List<ExceptionInfo> exceptionInfos = exceptionService.findExceptionList();
+        for (ExceptionInfo exceptionInfo : exceptionInfos) {
+            exceptionInfo.setSimilasrity(SimilarityUtil.getSimilarity(Jsoup.parse(exceptionInfo.getTitle() + exceptionInfo.getContent().replace("&nbsp;", "")).body().text(), param));
+        }
+        Collections.sort(exceptionInfos, (o1, o2) -> (int) ((o2.getSimilasrity() - o1.getSimilasrity()) * 100000));
+        List<ExceptionInfo> ret = exceptionInfos.parallelStream().filter((ExceptionInfo e) -> e.getSimilasrity() > 0.2).collect(Collectors.toList());
+        System.out.println(System.currentTimeMillis() - start + "ms");
+        map.put("list", ret);
+        map.put("param", param);
         return JSON.toJSONString(map);
     }
 }

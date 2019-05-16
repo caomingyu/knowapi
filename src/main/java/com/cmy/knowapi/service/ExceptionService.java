@@ -8,7 +8,9 @@ import java.util.Map;
 public interface ExceptionService {
     List<ExceptionInfo> findExceptionList();
 
-    List<ExceptionInfo> findExceptionListOrderBy(String orderBy,String isFinish);
+    List<ExceptionInfo> findMyExceptionList(Integer id);
+
+    List<ExceptionInfo> findExceptionListOrderBy(String orderBy, String isFinish);
 
     List<ExceptionInfo> findExceptionListByParam(String param);
 

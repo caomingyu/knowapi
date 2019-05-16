@@ -48,6 +48,12 @@ public class ExceptionIServiceImpl implements ExceptionService {
     }
 
     @Override
+    public List<ExceptionInfo> findMyExceptionList(Integer id) {
+        List<ExceptionInfo> exceptionInfos = exceptionMapper.findMyExceptionList(SystemException.DELETE_STATE, id);
+        return exceptionInfos;
+    }
+
+    @Override
     @Cacheable(key = "'exceptionList_'+#param", unless = "#result==null")
     public List<ExceptionInfo> findExceptionListByParam(String param) {
         return exceptionMapper.findExceptionListByParam(SystemException.DELETE_STATE, param);

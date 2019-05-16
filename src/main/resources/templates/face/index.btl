@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <title>用户中心</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_1168436_0efndpovvzb.css">
-    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="/css/global.css">
 </head>
 <body>
 
@@ -34,14 +34,14 @@
             <li class="layui-nav-item">
                 <a class="fly-nav-avatar" href="javascript:;">
                     <cite class="layui-hide-xs">${curUser.userName}</cite>
-                    <img src="../../images/head.png">
+                    <img src="/images/head.png">
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
                     <dd><a href="/face/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a>
                     </dd>
-                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>
-                    </dd>
+                    <!--                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>-->
+                    <!--                    </dd>-->
                     <hr style="margin: 5px 0;">
                     <dd><a href="/logout" style="text-align: center;">退出</a></dd>
                 </dl>
@@ -53,12 +53,12 @@
 
 <div class="layui-container fly-marginTop fly-user-main">
     <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-        <li class="layui-nav-item">
-            <a href="/face/user/home">
-                <i class="layui-icon">&#xe609;</i>
-                我的主页
-            </a>
-        </li>
+        <!--        <li class="layui-nav-item">-->
+        <!--            <a href="/face/user/home">-->
+        <!--                <i class="layui-icon">&#xe609;</i>-->
+        <!--                我的主页-->
+        <!--            </a>-->
+        <!--        </li>-->
         <li class="layui-nav-item layui-this">
             <a href="/face/user/index">
                 <i class="layui-icon">&#xe612;</i>
@@ -96,14 +96,18 @@
           您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
         </div>
         -->
+
         <div class="layui-tab layui-tab-brief" lay-filter="user">
             <ul class="layui-tab-title" id="LAY_mine">
-                <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span>89</span>）</li>
-                <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span>16</span>）</li>
+                <li id="mine-jie" data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span></span>）
+                </li>
+                <li id="collection" data-type="collection" data-url="/collection/find/" lay-id="collection" class="">
+                    我收藏的帖（<span>16</span>）
+                </li>
             </ul>
             <div class="layui-tab-content" style="padding: 20px 0;">
                 <div class="layui-tab-item layui-show">
-                    <ul class="mine-view jie-row">
+                    <ul id="myException" class="mine-view jie-row">
                         <li>
                             <a class="jie-title" href="../jie/detail.html" target="_blank">基于 layui 的极简社区页面模版</a>
                             <i>2017/3/14 上午8:30:00</i>
@@ -145,22 +149,69 @@
 
 </div>
 
-<script src="../../layui/layui.js"></script>
+<script src="/layui/layui.js"></script>
+<script src="/js/jquery-3.4.0.min.js"></script>
 <script>
+    function getFormatDate(nowDate) {
+        var nowDate = new Date(nowDate);
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+        var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+        return year + "-" + month + "-" + date;
+    }
+
     layui.cache.page = '';
     layui.cache.user = {
         username: '游客'
         , uid: -1
-        , avatar: '../images/avatar/00.jpg'
+        , avatar: '/images/avatar/00.jpg'
         , experience: 83
         , sex: '男'
     };
     layui.config({
         version: "1.0.0"
-        , base: '../../module/' //这里实际使用时，建议改成绝对路径
+        , base: '/module/' //这里实际使用时，建议改成绝对路径
     }).extend({
         fly: 'user_index'
-    }).use('fly');
+    }).use(['fly', 'element'], function () {
+        var element = layui.element;
+        debugger;
+        var id = "${this!}";
+        if (id == null || id == "") {
+            $("#mine-jie").addClass("layui-this");
+            $("#collection").removeClass("layui-this");
+            element.tabChange("user", "index");
+        } else {
+            $("#mine-jie").removeClass("layui-this");
+            $("#collection").addClass("layui-this");
+            element.tabChange("user", "collection");
+        }
+
+        debugger;
+        $.ajax({
+            url: "/my/exception",
+            type: "post",
+            data: {"uid": "${curUser.id}"},
+            success: function (info) {
+                var result = JSON.parse(info);
+                if (result.data == "true") {
+                    $("#myException").empty();
+                    $("#mine-jie span").empty();
+                    var list = result.list;
+                    $("#mine-jie span").append(list.length);
+                    for (var i = 0; i < list.length; i++) {
+                        var ans = list[i].answerCount;
+                        if (ans == null || ans == "") {
+                            ans = 0;
+                        }
+                        var data = getFormatDate(list[i].createTime);
+                        $("#myException").append("<li><a class='jie-title' href='/exception/show?eid=" + list[i].eid + "' target='_blank'>" + list[i].title + "</a><i>" + data + "</i><a class='mine-edit' href='/jie/edit/8116'>编辑</a><em>" + ans + "答</em></li>");
+                    }
+                }
+            }
+        });
+    });
+
 </script>
 
 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");

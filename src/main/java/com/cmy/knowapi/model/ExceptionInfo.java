@@ -3,8 +3,10 @@ package com.cmy.knowapi.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
 
 @Data
 @Table(name = "sys_exception_info")
@@ -33,12 +35,14 @@ public class ExceptionInfo {
     private Integer state;
     @Transient
     private Integer eid;
-        @Transient
+    @Transient
     private Integer fid;
-        @Transient
+    @Transient
     private Integer tid;
     @Transient
     private Integer isFinish;
+    @Transient
+    private Double similasrity;
     @Transient
     private List<AnswerInfo> answerInfoList;
 }

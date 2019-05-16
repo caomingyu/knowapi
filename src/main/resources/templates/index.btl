@@ -43,8 +43,8 @@
                     <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
                     <dd><a href="/face/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a>
                     </dd>
-                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>
-                    </dd>
+<!--                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>-->
+<!--                    </dd>-->
                     <hr style="margin: 5px 0;">
                     <dd><a href="/logout" style="text-align: center;">退出</a></dd>
                 </dl>
@@ -64,8 +64,8 @@
             <!--            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>-->
 
             <%if(isNotEmpty(curUser)){%>
-            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li>
-            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/face/user/index">我发表的贴</a></li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/face/user/index/collection">我收藏的贴</a>
             </li>
             <%}%>
         </ul>
