@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>查看帖子</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/global.css">
+</head>
+<body>
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+        <a class="fly-logo" href="/">
+            <!--            <i class="icon-library"></i>-->
+            <span style="color: white;font-size: 24px">异常知识库</span>
+        </a>
+        <ul class="layui-nav fly-nav-user">
+
+            <!-- 未登入的状态 -->
+            <% if(isEmpty(curUser)){%>
+            <li class="layui-nav-item">
+                <a class="iconfont icon-touxiang layui-hide-xs" href="/login"></a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/login">登入</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/regist">注册</a>
+            </li>
+            <%}else{ %>
+            <!-- 登入后的状态 -->
+            <li class="layui-nav-item">
+                <a class="fly-nav-avatar" href="javascript:;">
+                    <cite class="layui-hide-xs">${curUser.userName}</cite>
+                    <img src="../../images/head.png">
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                    <dd><a href="/face/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a>
+                    </dd>
+                    <!--                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>-->
+                    <!--                    </dd>-->
+                    <hr style="margin: 5px 0;">
+                    <dd><a href="/logout" style="text-align: center;">退出</a></dd>
+                </dl>
+            </li>
+            <%}%>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container fly-marginTop">
+    <div class="fly-panel" pad20 style="padding-top: 5px;">
+        <div class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief" lay-filter="user">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">查看帖子</li>
+                    <span class="fly-mid"></span>
+                    <%
+                    if(e.author==curUser.userName){%>
+                    <li id="edit">编辑帖子</li>
+                    <%}%>
+                    <li class="">回复帖子</li>
+                </ul>
+                <div class="layui-tab-content" style="padding: 20px 0;">
+                    <div class="layui-tab-item layui-show ">
+                        <div class="layui-row layui-col-md12" style="padding: 20px 0;">
+                            <h2 style="text-align: center;">${e.title}</h2>
+                        </div>
+                        <div class="layui-row" style="padding: 20px 0;">
+                            <div class="layui-col-md4" style="text-align: center;margin-left: 150px">
+                                <label>作者:</label>
+                                <span style="text-align: center">${e.author!"用户"}</span>
+                            </div>
+                            <div class="layui-col-md4" style="text-align: center;margin-left: -150px">
+                                <label>发布时间:</label>
+                                <span style="text-align: center">${e.createTime!"2019-05-11",dateFormat="yyyy-MM-dd"}</span>
+                            </div>
+                            <div class="layui-col-md4" style="text-align: center;margin-left: -150px">
+                                <label>点赞数量:</label>
+                                <span style="text-align: center">${e.answerCount!"0"}</span>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div style="margin:0 0 0 170px; font-family:‘微软雅黑’,‘黑体’,‘宋体’;font-size:14px;padding-right: 157px">
+                            ${e.content}
+                        </div>
+                    </div>
+                    <%
+                    if(e.author==curUser.userName){%>
+                    <div class="layui-tab-item">
+                        <form action="" method="post">
+                            <div class="layui-row layui-col-space15 layui-form-item">
+                                <div class="layui-col-md3">
+                                    <label class="layui-form-label">所在环节</label>
+                                    <div class="layui-input-block">
+                                        <select lay-verify="required" name="flowId" id="flowid" lay-filter="column">
+                                            <option value="0"></option>
+                                            <%
+                                            for(flow in flows){
+                                            if(!isEmpty(flow.childFlowLists)){%>
+                                            <optgroup label="${flow.description}">
+                                                <%
+                                                for(child in flow.childFlowLists){%>
+                                                <option value="${child.id}">${child.description}</option>
+                                                <%}%>
+                                            </optgroup>
+                                            <%}else{%>
+                                            <option value="${flow.id}">${flow.description}</option>
+                                            <%}}%>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <label for="L_title" class="layui-form-label">异常编码</label>
+                                    <div class="layui-input-block">
+                                        <input lay-verify="required" type="text" id="L_code" name="code"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <label for="L_title" class="layui-form-label">异常类型</label>
+                                    <div class="layui-input-block">
+                                        <select lay-verify="required" name="typeId" id="typeId" lay-filter="column">
+                                            <option></option>
+                                            <%for(type in types){%>
+                                            <option value="${type.id}" code="${type.code}">${type.description}</option>
+                                            <%}%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-col-space15 layui-form-item">
+                                <div class="layui-col-md12">
+                                    <label for="L_title" class="layui-form-label">标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="L_title" name="title" lay-verify="required"
+                                               autocomplete="off" class="layui-input">
+                                        <input type="hidden" name="id" value="${e.id!}">
+                                        <input type="hidden" name="eid" value="${e.eid!}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <div class="layui-input-block">
+                                    <textarea id="editArea" name="content"
+                                              placeholder="详细描述" class="layui-textarea"
+                                              style="height: 360px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="L_vercode" class="layui-form-label">人类验证</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="L_vercode" name="vercode" lay-verify="required"
+                                           placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">
+                                    <span id="randomMath" style="color: #c00;"></span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="addException" lay-submit>立即发布</button>
+                            </div>
+                        </form>
+                    </div>
+                    <%}%>
+                    <div class="layui-tab-item">
+                        <form action="/answer/add" method="post">
+                            <div class="layui-row layui-col-space15 layui-form-item">
+                            <div class="layui-row layui-col-space15 layui-form-item">
+                                <div class="layui-col-md12">
+                                    <label for="L_title" class="layui-form-label">标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="L_title" name="title" lay-verify="required"
+                                               autocomplete="off" class="layui-input">
+                                        <input type="hidden" name="eid" value="${e.eid!}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <div class="layui-input-block">
+                                    <textarea id="editArea2" name="content"
+                                              placeholder="详细描述" class="layui-textarea"
+                                              style="height: 360px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="L_vercode" class="layui-form-label">人类验证</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="L_vercode" name="vercode" lay-verify="required"
+                                           placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">
+                                    <span id="randomMath" style="color: #c00;"></span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="addAnswer" lay-submit>立即发布</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="submitForm" action="/exception/show" type="post">
+        <input name="eid" value="" id="eid" type="hidden">
+    </form>
+</div>
+
+<script src="../../layui/layui.js"></script>
+<script src="../../js/jquery-3.4.0.min.js"></script>
+<script>
+    layui.cache.page = '';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '../images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "1.0.0"
+        , base: '../../module/' //这里实际使用时，建议改成绝对路径
+    }).extend({
+        fly: 'user_index'
+    }).use('fly');
+    layui.use(['layedit', 'form', 'layer'], function () {
+        var layedit = layui.layedit;
+        var form = layui.form;
+        var layer = layui.layer;
+
+        var randomV = randomMath();
+        $("#randomMath").html(randomV[0]);
+
+        layedit.set({
+            //暴露layupload参数设置接口 --详细查看layupload参数说明
+            uploadImage: {
+                url: '/Attachment/LayUploadFile',
+                accept: 'image',
+                acceptMime: 'image/*',
+                exts: 'jpg|png|gif|bmp|jpeg',
+                size: '10240'
+            }
+            , uploadVideo: {
+                url: '/Attachment/LayUploadFile',
+                accept: 'video',
+                acceptMime: 'video/*',
+                exts: 'mp4|flv|avi|rm|rmvb',
+                size: '20480'
+            }
+            //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
+            //传递参数：
+            //图片： imgpath --图片路径
+            //视频： filepath --视频路径 imgpath --封面路径
+            , calldel: {
+                url: '/Attachment/DeleteFile'
+            }
+            //开发者模式 --默认为false
+            , devmode: true
+            //插入代码设置
+            , codeConfig: {
+                hide: true,  //是否显示编码语言选择框
+                default: 'javascript' //hide为true时的默认语言格式
+            },
+            tool: ['html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'colorpicker', 'face', '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images', 'image_alt', 'video', 'anchors', '|', 'table', 'fullScreen', 'preview']
+            , height: '90%'
+        });
+        editIndex = layedit.build('editArea'); //建立编辑器
+        editIndex2 = layedit.build('editArea2');
+
+        $("#edit").click(function () {
+            // debugger;
+            $("#flowid").find("option[value='" +${e.fid} +"']").attr("selected", true);
+            $("#typeId").find("option[value='" +${e.tid} +"']").attr("selected", true);
+            $("#L_code").val("${e.exceptionCode!}");
+            $("#L_title").val("${e.title!}");
+            layedit.setContent(editIndex, '${e.content!}', false);
+        });
+
+        form.on('submit(addException)', function (data) {
+            debugger;
+            var answer = $("#L_vercode").val();
+            if (answer != randomV[1]) {
+                layer.msg("验证问题错误，请重试", {icon: 5, anim: 6});
+                randomV = randomMath();
+                $("#randomMath").html(randomV[0]);
+                return false;
+            }
+            layedit.sync(editIndex);
+            data.field.content = $("#editArea").val();
+            if ($("#editArea").val() == '') {
+                layer.msg("详细描述不能为空", {icon: 5, anim: 6});
+                return false;
+            }
+            $.ajax({
+                url: "/exception/update",
+                type: "post",
+                data: data.field,
+                success: function (info) {
+                    debugger;
+                    var result = JSON.parse(info);
+                    if (result.data == "true") {
+                        var eid = result.eid;
+                        debugger;
+                        layer.open({
+                            content: '发布成功'
+                            , btn: ['回到首页', '查看帖子', '再写一篇']
+                            , yes: function (index, layero) {
+                                //按钮【按钮一】的回调
+                                location.href = "/";
+                            }
+                            , btn2: function (index, layero) {
+                                $("#eid").val(eid);
+                                $("#submitForm").submit();
+                            }
+                            , btn3: function (index, layero) {
+                                //按钮【按钮三】的回调
+                                location.href = "/face/exception/add";
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            }
+                            , cancel: function () {
+                                //右上角关闭回调
+
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            }
+                        });
+                    } else {
+                        layer.msg("发布失败,请重试");
+                    }
+                }
+            });
+            return false;
+        })
+    });
+
+    form.on('submit(addAnswer)', function (data) {
+            debugger;
+            var answer = $("#L_vercode").val();
+            if (answer != randomV[1]) {
+                layer.msg("验证问题错误，请重试", {icon: 5, anim: 6});
+                randomV = randomMath();
+                $("#randomMath").html(randomV[0]);
+                return false;
+            }
+            layedit.sync(editIndex2);
+            data.field.content = $("#editArea").val();
+            if ($("#editArea").val() == '') {
+                layer.msg("详细描述不能为空", {icon: 5, anim: 6});
+                return false;
+            }
+            $.ajax({
+                url: "/exception/update",
+                type: "post",
+                data: data.field,
+                success: function (info) {
+                    debugger;
+                    var result = JSON.parse(info);
+                    if (result.data == "true") {
+                        var eid = result.eid;
+                        debugger;
+                        layer.open({
+                            content: '发布成功'
+                            , btn: ['回到首页', '查看帖子', '再写一篇']
+                            , yes: function (index, layero) {
+                                //按钮【按钮一】的回调
+                                location.href = "/";
+                            }
+                            , btn2: function (index, layero) {
+                                $("#eid").val(eid);
+                                $("#submitForm").submit();
+                            }
+                            , btn3: function (index, layero) {
+                                //按钮【按钮三】的回调
+                                location.href = "/face/exception/add";
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            }
+                            , cancel: function () {
+                                //右上角关闭回调
+
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            }
+                        });
+                    } else {
+                        layer.msg("发布失败,请重试");
+                    }
+                }
+            });
+            return false;
+        })
+    });
+
+    function randomMath() {
+        var ret = [];
+        var option = ['+', '-', '*', '/'];
+        var random = Math.floor(Math.random() * 4 + 1);
+        var num1 = Math.floor(Math.random() * 100 + 1);
+        var num2 = Math.floor(Math.random() * 100 + 1);
+        if (random == 4) {
+            ret[0] = num1 * num2 + '/' + num1 + '=?';
+            ret[1] = num2;
+        } else {
+            ret[0] = num1 + '' + option[random - 1] + '' + num2 + '=?';
+            var retV;
+            switch (option[random - 1]) {
+                case '+':
+                    retV = num1 + num2;
+                    break;
+                case '-':
+                    retV = num1 - num2;
+                    break;
+                case '*':
+                    retV = num1 * num2;
+                    break;
+            }
+            ret[1] = retV;
+        }
+        return ret;
+    }
+
+</script>
+</body>
+</html>
