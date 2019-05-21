@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://39.96.222.232/knowapi?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    url: jdbc:mysql://caomingyu.mysql.rds.aliyuncs.com/knowapi?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: cmy
-    password: admin
+    password: Admin_cmy
     druid:
       filter:
         stat:

@@ -14,6 +14,8 @@ public interface ExceptionService {
 
     List<ExceptionInfo> findExceptionListByParam(String param);
 
+    List<ExceptionInfo> getCollectionByUid(Integer uid);
+
     ExceptionInfo findExceptionById(Integer id);
 
     boolean delException(Integer id);

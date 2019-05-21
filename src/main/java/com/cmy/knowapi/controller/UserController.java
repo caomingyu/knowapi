@@ -8,6 +8,8 @@ import com.cmy.knowapi.service.UserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -115,5 +117,42 @@ public class UserController {
         map.put("data", "true");
         map.put("list", userInfos);
         return JSON.toJSONString(map);
+    }
+
+    @GetMapping("/user/home")
+    public String userHome(Integer uid, Integer eid, Map<String, Object> map) {
+        User user = null;
+        //根据uid查看个人信息
+        if (uid != null) {
+            user = userService.findUserById(uid);
+        }
+        //根据eid查看个人信息
+        if (eid != null) {
+            uid = userService.selectUidByEid(eid);
+            user = userService.findUserById(uid);
+        }
+        String userName = user.getUserName();
+        UserInfo userInfo = userService.findUserInfoByName(userName);
+        Subject subject = SecurityUtils.getSubject();
+        userName = (String) subject.getPrincipal();
+        User curUser = userService.findUserByName(userName);
+        map.put("curUser", curUser);
+        userInfo.setUid(user.getId());
+        map.put("user", userInfo);
+        return "/face/other_set.btl";
+    }
+
+    @GetMapping("/user/home/index")
+    public String userHomeIndex(Integer uid, Map<String, Object> map) {
+        User user = userService.findUserById(uid);
+        String userName = user.getUserName();
+        UserInfo userInfo = userService.findUserInfoByName(userName);
+        Subject subject = SecurityUtils.getSubject();
+        userName = (String) subject.getPrincipal();
+        User curUser = userService.findUserByName(userName);
+        userInfo.setUid(user.getId());
+        map.put("curUser", curUser);
+        map.put("user", userInfo);
+        return "/face/other_index.btl";
     }
 }

@@ -3,13 +3,16 @@ package com.cmy.knowapi.service;
 import com.cmy.knowapi.model.Role;
 import com.cmy.knowapi.model.User;
 import com.cmy.knowapi.model.UserInfo;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
 
 public interface UserService {
     User findUserByName(String userName);
+
+    User findUserById(Integer uid);
+
+    Integer selectUidByEid(Integer eid);
 
     boolean insertUser(User user);
 

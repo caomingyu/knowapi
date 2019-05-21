@@ -39,8 +39,6 @@
                     <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
                     <dd><a href="/face/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a>
                     </dd>
-                    <!--                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>-->
-                    <!--                    </dd>-->
                     <hr style="margin: 5px 0;">
                     <dd><a href="/logout" style="text-align: center;">退出</a></dd>
                 </dl>
@@ -108,16 +106,6 @@
                 $("#lists").append("<li style='margin-left: 200px;color: dodgerblue'>没有相关内容，请换个说法</li>")
                 return false;
             }
-            // for (var i = 0; i < list.length; i++) {
-            //     var data = getFormatDate(list[i].createTime);
-            //     var ans = list[i].answerCount;
-            //     if (list[i].answerCount == null) {
-            //         ans = 0;
-            //     }
-            //     $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
-            //         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
-            //         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
-            // }
             debugger;
             var pageNum;
             if (list.length % 10 == 0) {
@@ -160,7 +148,7 @@
                 if (list[i].answerCount == null) {
                     ans = 0;
                 }
-                $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                $("#lists").append("<li><a href='/user/home?eid="+list[i].eid+"' class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                     "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                     "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
             }
@@ -177,7 +165,7 @@
                 if (list[i].answerCount == null) {
                     ans = 0;
                 }
-                $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                $("#lists").append("<li><a href='/user/home?eid="+list[i].eid+"'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                     "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                     "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
             }
@@ -208,16 +196,6 @@
 
                     return false;
                 }
-                // for (var i = 0; i < list.length; i++) {
-                //     var data = getFormatDate(list[i].createTime);
-                //     var ans = list[i].answerCount;
-                //     if (list[i].answerCount == null) {
-                //         ans = 0;
-                //     }
-                //     $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
-                //         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
-                //         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
-                // }
                 debugger;
                 var pageNum;
                 if (list.length % 10 == 0) {
@@ -247,7 +225,9 @@
         });
         return false;
     }
-
+    function toHome(eid) {
+        location.href="/user/home?eid="+eid;
+    }
 </script>
 
 

@@ -92,7 +92,6 @@ layui.config({
     dropdown: 'dropdown/dropdown',
     notice: 'notice/notice',
     step: 'step-lay/step',
-    dtree: 'dtree/dtree',
     citypicker: 'city-picker/city-picker',
     tableSelect: 'tableSelect/tableSelect',
     ax: 'ax/ax',

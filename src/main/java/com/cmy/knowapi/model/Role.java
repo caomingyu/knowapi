@@ -17,10 +17,14 @@ public class Role {
     private String role;
     @Column(name = "description")
     private String description;
+    private Integer pid;
+    private String path;
     @Transient
     private List<Permission> permissionList;
     @Transient
     Set<Menu> menuList;
     @Transient
     private boolean chose;
+    @Transient
+    private List<Role> childRole;
 }

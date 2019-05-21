@@ -40,8 +40,6 @@
                     <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
                     <dd><a href="/face/user/message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a>
                     </dd>
-                    <!--                    <dd><a href="/face/user/home"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>-->
-                    <!--                    </dd>-->
                     <hr style="margin: 5px 0;">
                     <dd><a href="/logout" style="text-align: center;">退出</a></dd>
                 </dl>
@@ -54,21 +52,15 @@
 <div class="layui-container fly-marginTop fly-user-main">
     <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
         <li class="layui-nav-item layui-this">
-            <a href="/face/user/index">
+            <a href="/user/home/index?uid=${user.uid}">
                 <i class="layui-icon">&#xe612;</i>
                 用户中心
             </a>
         </li>
         <li class="layui-nav-item">
-            <a href="/face/user/set">
+            <a href="/user/home?uid=${user.uid}">
                 <i class="layui-icon">&#xe620;</i>
                 基本设置
-            </a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="/face/user/message">
-                <i class="layui-icon">&#xe611;</i>
-                我的消息
             </a>
         </li>
     </ul>
@@ -96,7 +88,7 @@
                 <li id="mine-jie" data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span></span>）
                 </li>
                 <li id="collection" data-type="collection" data-url="/collection/find/" lay-id="collection" class="">
-                    我收藏的帖（<span></span>）
+                    我收藏的帖（<span>16</span>）
                 </li>
             </ul>
             <div class="layui-tab-content" style="padding: 20px 0;">
@@ -164,7 +156,7 @@
         $.ajax({
             url: "/my/exception",
             type: "post",
-            data: {"uid": "${curUser.id}"},
+            data: {"uid": "${user.uid}"},
             success: function (info) {
                 var result = JSON.parse(info);
                 if (result.data == "true") {
@@ -183,11 +175,10 @@
                 }
             }
         });
-
         $.ajax({
             url:"/exception/collection/byUid",
             type:"post",
-            data:{"uid":"${curUser.id}"},
+            data:{"uid":"${user.uid}"},
             success:function (info) {
                 var result=JSON.parse(info);
                 if (result.data == "true") {
@@ -207,6 +198,7 @@
 
             }
         });
+
     });
 
 </script>

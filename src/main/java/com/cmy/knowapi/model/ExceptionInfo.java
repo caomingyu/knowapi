@@ -3,10 +3,8 @@ package com.cmy.knowapi.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 
 @Data
 @Table(name = "sys_exception_info")

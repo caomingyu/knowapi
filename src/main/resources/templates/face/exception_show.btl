@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../../layui/css/layui.css">
     <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+
 </head>
 <body>
 <div class="fly-header layui-bg-black">
@@ -54,13 +56,13 @@
         <div class="layui-form layui-form-pane">
             <div class="layui-tab layui-tab-brief" lay-filter="user">
                 <ul class="layui-tab-title">
-                    <li class="layui-this">查看帖子</li>
+                    <li class="tab layui-this">查看帖子</li>
                     <span class="fly-mid"></span>
                     <%
                     if(e.author==curUser.userName){%>
-                    <li id="edit">编辑帖子</li>
+                    <li id="edit" class="tab">编辑帖子</li>
                     <%}%>
-                    <li class="">回复帖子</li>
+                    <li class="tab">回复帖子</li>
                 </ul>
                 <div class="layui-tab-content" style="padding: 20px 0;">
                     <div class="layui-tab-item layui-show ">
@@ -68,21 +70,32 @@
                             <h2 style="text-align: center;">${e.title}</h2>
                         </div>
                         <div class="layui-row" style="padding: 20px 0;">
-                            <div class="layui-col-md4" style="text-align: center;margin-left: 150px">
+                            <div class="layui-col-md3" style="text-align: center;margin-left: 150px">
                                 <label>作者:</label>
                                 <span style="text-align: center">${e.author!"用户"}</span>
                             </div>
-                            <div class="layui-col-md4" style="text-align: center;margin-left: -150px">
+                            <div class="layui-col-md3" style="text-align: center;margin-left: -90px">
                                 <label>发布时间:</label>
                                 <span style="text-align: center">${e.createTime!"2019-05-11",dateFormat="yyyy-MM-dd"}</span>
                             </div>
-                            <div class="layui-col-md4" style="text-align: center;margin-left: -150px">
-                                <label>点赞数量:</label>
+                            <div class="layui-col-md3" style="text-align: center;margin-left: -90px">
+                                <label>回帖数量:</label>
                                 <span style="text-align: center">${e.answerCount!"0"}</span>
+                            </div>
+                            <div class="layui-col-md3" style="margin-left: -230px">
+                                <a href="#" onclick="collection_(${e.eid})"><span style="float: right;">收藏:
+                                <%if(isCollection=="true"){%>
+                                    <i class="layui-icon layui-icon-star-fill" id="collection"
+                                       style="color: #78a5f1"></i>
+                                    <%}else{%>
+                                    <i class="layui-icon layui-icon-star" id="collection" style="color: #78a5f1"></i>
+                                  <%}%>
+                                </span></a>
                             </div>
                         </div>
                         <hr/>
-                        <div style="margin:0 0 0 170px; font-family:‘微软雅黑’,‘黑体’,‘宋体’;font-size:14px;padding-right: 157px">
+                        <div id="exceptionContent"
+                             style="margin:0 0 0 170px; font-family:‘微软雅黑’,‘黑体’,‘宋体’;font-size:14px;padding-right: 157px">
                             ${e.content}
                         </div>
                     </div>
@@ -134,7 +147,7 @@
                                 <div class="layui-col-md12">
                                     <label for="L_title" class="layui-form-label">标题</label>
                                     <div class="layui-input-block">
-                                        <input type="text" id="L_title" name="title" lay-verify="required"
+                                        <input type="text" id="title" name="title" lay-verify="required"
                                                autocomplete="off" class="layui-input">
                                         <input type="hidden" name="id" value="${e.id!}">
                                         <input type="hidden" name="eid" value="${e.eid!}">
@@ -149,13 +162,13 @@
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label for="L_vercode" class="layui-form-label">人类验证</label>
+                                <label class="layui-form-label">人类验证</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="L_vercode" name="vercode" lay-verify="required"
-                                           placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
+                                    <input type="text" id="" name="vercode" lay-verify="required"
+                                           placeholder="请回答后面的问题" autocomplete="off" class="layui-input L_vercode">
                                 </div>
                                 <div class="layui-form-mid">
-                                    <span id="randomMath" style="color: #c00;"></span>
+                                    <span class="randomMath" style="color: #c00;"></span>
                                 </div>
                             </div>
                             <div class="layui-form-item">
@@ -165,37 +178,38 @@
                     </div>
                     <%}%>
                     <div class="layui-tab-item">
-                        <form action="/answer/add" method="post">
+                        <form action="" method="post">
                             <div class="layui-row layui-col-space15 layui-form-item">
-                            <div class="layui-row layui-col-space15 layui-form-item">
-                                <div class="layui-col-md12">
-                                    <label for="L_title" class="layui-form-label">标题</label>
-                                    <div class="layui-input-block">
-                                        <input type="text" id="L_title" name="title" lay-verify="required"
-                                               autocomplete="off" class="layui-input">
-                                        <input type="hidden" name="eid" value="${e.eid!}">
+                                <div class="layui-row layui-col-space15 layui-form-item">
+                                    <div class="layui-col-md12">
+                                        <label for="L_title" class="layui-form-label">标题</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="L_title" name="title" lay-verify="required"
+                                                   autocomplete="off" class="layui-input">
+                                            <input type="hidden" name="eid" value="${e.eid!}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="layui-form-item layui-form-text">
-                                <div class="layui-input-block">
+                                <div class="layui-form-item layui-form-text">
+                                    <div class="layui-input-block">
                                     <textarea id="editArea2" name="content"
                                               placeholder="详细描述" class="layui-textarea"
                                               style="height: 360px;"></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label for="L_vercode" class="layui-form-label">人类验证</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" id="L_vercode" name="vercode" lay-verify="required"
-                                           placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">人类验证</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="vercode" lay-verify="required"
+                                               placeholder="请回答后面的问题" autocomplete="off" class="layui-input L_vercode">
+                                    </div>
+                                    <div class="layui-form-mid">
+                                        <span class="randomMath" style="color: #c00;"></span>
+                                    </div>
                                 </div>
-                                <div class="layui-form-mid">
-                                    <span id="randomMath" style="color: #c00;"></span>
+                                <div class="layui-form-item">
+                                    <button class="layui-btn" lay-filter="addAnswer" lay-submit>立即发布</button>
                                 </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <button class="layui-btn" lay-filter="addAnswer" lay-submit>立即发布</button>
                             </div>
                         </form>
                     </div>
@@ -203,13 +217,35 @@
             </div>
         </div>
     </div>
+
     <form id="submitForm" action="/exception/show" type="post">
         <input name="eid" value="" id="eid" type="hidden">
     </form>
 </div>
 
-<script src="../../layui/layui.js"></script>
-<script src="../../js/jquery-3.4.0.min.js"></script>
+<div class="layui-container fly-marginTop" id="answerDiv">
+    <div class="fly-panel" pad20 style="padding-top: 5px;">
+        <div class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief" lay-filter="answer">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">回复</li>
+                    <span class="fly-mid"></span>
+                </ul>
+                <div class="layui-tab-content" style="padding: 20px 0;">
+                    <div class="layui-tab-item layui-show ">
+                        <ul class="fly-list" id="lists">
+                        </ul>
+                    </div>
+                    <div id="pagination_12" style="margin: 0 auto;align-content: center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/layui/layui.js"></script>
+<script src="/js/jquery-3.4.0.min.js"></script>
+<script src="/js/pagination.min.js"></script>
+
 <script>
     layui.cache.page = '';
     layui.cache.user = {
@@ -225,13 +261,75 @@
     }).extend({
         fly: 'user_index'
     }).use('fly');
-    layui.use(['layedit', 'form', 'layer'], function () {
+    layui.use(['layedit', 'form', 'layer', 'element'], function () {
         var layedit = layui.layedit;
         var form = layui.form;
         var layer = layui.layer;
+        var element = layui.element;
 
         var randomV = randomMath();
-        $("#randomMath").html(randomV[0]);
+        $("span.randomMath").html(randomV[0]);
+        debugger;
+        var tab = $(".tab.layui-this").text();
+        if (tab == "查看帖子") {
+            $("#answerDiv").show();
+        } else {
+            $("#answerDiv").hide();
+        }
+
+        element.on('tab(user)', function (data) {
+            var tab = $(".tab.layui-this").text();
+            if (tab == "查看帖子") {
+                $("#answerDiv").show();
+            } else {
+                $("#answerDiv").hide();
+            }
+        });
+
+        $.ajax({
+            url: "/answer/info",
+            type: "post",
+            data: {"eid": '${e.eid}'},
+            success: function (info) {
+                var result = JSON.parse(info);
+                if (result.data == "true") {
+                    var list = result.lists;
+                    $("#lists").empty();
+                    for (var i = 0; i < list.length; i++) {
+                        var data = getFormatDate(list[i].passTime);
+                        var ans = list[i].agreeCount;
+                        if (list[i].agreeCount == null) {
+                            ans = 0;
+                        }
+                        var temp = "";
+                        if (list[i].author == '${curUser.userName!}') {
+                            temp = "<a class='layui-badge' style='float: right;margin-top: 4px' onclick='openEdit(" + list[i].aid + ")'>编辑</a>";
+                        }
+                        $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2 class='title_" + i + "' onclick='showContent(" + i + ")'><a class='layui-badge'>问题</a><a>" + list[i].tittle + "</a>" + temp + "</h2><div class='fly-list-info'><a onclick='toHome(" + list[i].aid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span onclick='agree(" + list[i].aid + ")' class='fly-list-nums'>" +
+                            "<i class='layui-icon layui-icon-praise' title='点赞'></i>" + ans + "</span></div></li>");
+                        $("#lists").append("<div id='answerContent' style='display: none' class='content_" + i + "'><div class='layui-row layui-col-md12' style='padding: 20px 0;'><h2 style='text-align: center;'>" + list[i].tittle + "</h2></div><div class='layui-row' style='padding: 20px 0;'><div class='layui-col-md4' style='text-align: center;margin-left: 150px'><label>作者:</label><span style='text-align: center'>" + list[i].author + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>发布时间:</label><span style='text-align: center'>" + data + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>赞同数:</label><span style='text-align: center'>" + ans + "</span></div></div><hr/><div style='margin:0 0 0 170px; font-family:‘微软雅黑’,‘黑体’,‘宋体’;font-size:14px;padding-right: 157px'>" + list[i].content + "</div></div>")
+                    }
+                    $("#pagination_12").whjPaging({
+                        css: 'css-2',
+                        totalSize: result.pager.total,
+                        totalPage: result.pager.pages,
+                        // isShowSkip: false,
+                        isShowRefresh: false,
+                        pageSizeOpt: [
+                            {value: 10, text: '10条/页', selected: true},
+                            {value: 15, text: '15条/页'},
+                            {value: 20, text: '20条/页'}
+                        ],
+                        callBack: function (currPage, pageSize) {
+                            var eid = '${e.eid}';
+                            loadDate_(eid, currPage, pageSize);
+                        }
+                    });
+
+                }
+
+            }
+        });
 
         layedit.set({
             //暴露layupload参数设置接口 --详细查看layupload参数说明
@@ -269,18 +367,24 @@
         editIndex = layedit.build('editArea'); //建立编辑器
         editIndex2 = layedit.build('editArea2');
 
+        var author = "${e.author}";
+        var userName = "${curUser.userName}";
+
         $("#edit").click(function () {
             // debugger;
             $("#flowid").find("option[value='" +${e.fid} +"']").attr("selected", true);
             $("#typeId").find("option[value='" +${e.tid} +"']").attr("selected", true);
             $("#L_code").val("${e.exceptionCode!}");
-            $("#L_title").val("${e.title!}");
-            layedit.setContent(editIndex, '${e.content!}', false);
+            $("#title").val("${e.title!}");
+            var con=$("#exceptionContent").text();
+            console.log(con);
+
+            layedit.setContent(editIndex, '${showContent!}', false);
         });
 
         form.on('submit(addException)', function (data) {
             debugger;
-            var answer = $("#L_vercode").val();
+            var answer = $("input.L_vercode").val();
             if (answer != randomV[1]) {
                 layer.msg("验证问题错误，请重试", {icon: 5, anim: 6});
                 randomV = randomMath();
@@ -331,12 +435,10 @@
                 }
             });
             return false;
-        })
-    });
-
-    form.on('submit(addAnswer)', function (data) {
+        });
+        form.on('submit(addAnswer)', function (data) {
             debugger;
-            var answer = $("#L_vercode").val();
+            var answer = $("input.L_vercode").val();
             if (answer != randomV[1]) {
                 layer.msg("验证问题错误，请重试", {icon: 5, anim: 6});
                 randomV = randomMath();
@@ -360,21 +462,9 @@
                     if (result.data == "true") {
                         var eid = result.eid;
                         debugger;
-                        layer.open({
-                            content: '发布成功'
-                            , btn: ['回到首页', '查看帖子']
-                            , yes: function (index, layero) {
-                                //按钮【按钮一】的回调
-                                location.href = "/";
-                            }
-                            , btn2: function (index, layero) {
-                                $("#eid").val(eid);
-                                $("#submitForm").submit();
-                            }
-                            , cancel: function () {
-                                //右上角关闭回调
-
-                                //return false 开启该代码可禁止点击该按钮关闭
+                        layer.msg("回复成功，即将回到原帖", {
+                            icon: 1, time: 2000, end: function () {
+                                location.reload();
                             }
                         });
                     } else {
@@ -384,6 +474,9 @@
             });
             return false;
         });
+
+    });
+
 
     function randomMath() {
         var ret = [];
@@ -413,6 +506,218 @@
         return ret;
     }
 
+    function getFormatDate(nowDate) {
+        var nowDate = new Date(nowDate);
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+        var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+        return year + "-" + month + "-" + date;
+    }
+
+    function loadDate_(eid, currPage, pageSize) {
+        debugger;
+        var data = {};
+        data['pageNum'] = currPage;
+        data['pageSize'] = pageSize;
+        data['eid'] = eid;
+
+        console.log('currPage:' + currPage + '     pageSize:' + pageSize);
+        $.ajax({
+            url: "/answer/info",
+            type: "post",
+            data: data,
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                var list = result.lists;
+                $("#lists").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var data = getFormatDate(list[i].createTime);
+                    var ans = list[i].agreeCount;
+                    if (list[i].agreeCount == null) {
+                        ans = 0;
+                    }
+                    var temp = "";
+                    if (list[i].author == '${curUser.userName!}') {
+                        temp = "<a class='layui-badge' style='float: right;margin-top: 4px' onclick='openEdit(" + list[i].aid + ")'>编辑</a>";
+                    }
+                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2 class='title_" + i + "' onclick='showContent(" + i + ")'><a class='layui-badge'>问题</a><a>" + list[i].tittle + "</a>" + temp + "</h2><div class='fly-list-info'><a onclick='toHome(" + list[i].aid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span onclick='agree(" + list[i].aid + ")' class='fly-list-nums'>" +
+                        "<i class='layui-icon layui-icon-praise' title='点赞'></i>" + ans + "</span></div></li>");
+                    $("#lists").append("<div id='answerContent' style='display: none' class='content_" + i + "'><div class='layui-row layui-col-md12' style='padding: 20px 0;'><h2 style='text-align: center;'>" + list[i].tittle + "</h2></div><div class='layui-row' style='padding: 20px 0;'><div class='layui-col-md4' style='text-align: center;margin-left: 150px'><label>作者:</label><span style='text-align: center'>" + list[i].author + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>发布时间:</label><span style='text-align: center'>" + data + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>赞同数:</label><span style='text-align: center'>" + ans + "</span></div></div><hr/><div style='margin:0 0 0 170px; font-family:‘微软雅黑’,‘黑体’,‘宋体’;font-size:14px;padding-right: 157px'>" + list[i].content + "</div></div>")
+                }
+                $('html,body').animate({scrollTop: 0});
+            }
+        });
+    }
+
+    function agree(aid) {
+        event.stopPropagation();
+        debugger;
+        $.ajax({
+            url: "/answer/agreeUp",
+            type: "post",
+            data: {"aid": aid},
+            success: function (info) {
+                var result = JSON.parse(info);
+                if (result.data = "true") {
+                    $.ajax({
+                        url: "/answer/info",
+                        type: "post",
+                        data: {"eid": '${e.eid}'},
+                        success: function (info) {
+                            var result = JSON.parse(info);
+                            if (result.data == "true") {
+                                var list = result.lists;
+                                $("#lists").empty();
+                                for (var i = 0; i < list.length; i++) {
+                                    var data = getFormatDate(list[i].createTime);
+                                    var ans = list[i].agreeCount;
+                                    debugger;
+                                    if (list[i].agreeCount == null) {
+                                        ans = 0;
+                                    }
+                                    var temp = "";
+                                    if (list[i].author == '${curUser.userName!}') {
+                                        temp = "<a class='layui-badge' style='float: right;margin-top: 4px' onclick='openEdit(" + list[i].aid + ")'>编辑</a>";
+                                    }
+                                    $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2 class='title_" + i + "' onclick='showContent(" + i + ")'><a class='layui-badge'>问题</a><a>" + list[i].tittle + "</a>" + temp + "</h2><div class='fly-list-info'><a onclick='toHome(" + list[i].aid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span onclick='agree(" + list[i].aid + ")' class='fly-list-nums'>" +
+                                        "<i class='layui-icon layui-icon-praise' title='点赞'></i>" + ans + "</span></div></li>");
+                                    $("#lists").append("<div id='answerContent' style='display: none' class='content_" + i + "'><div class='layui-row layui-col-md12' style='padding: 20px 0;'><h2 style='text-align: center;'>" + list[i].tittle + "</h2></div><div class='layui-row' style='padding: 20px 0;'><div class='layui-col-md4' style='text-align: center;margin-left: 150px'><label>作者:</label><span style='text-align: center'>" + list[i].author + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>发布时间:</label><span style='text-align: center'>" + data + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>赞同数:</label><span style='text-align: center'>" + ans + "</span></div></div><hr/><div style='margin:0 0 0 170px; font-family:‘微软雅黑’,‘黑体’,‘宋体’;font-size:14px;padding-right: 157px'>" + list[i].content + "</div></div>")
+                                }
+                                $("#pagination_12").whjPaging({
+                                    css: 'css-2',
+                                    totalSize: result.pager.total,
+                                    totalPage: result.pager.pages,
+                                    // isShowSkip: false,
+                                    isShowRefresh: false,
+                                    pageSizeOpt: [
+                                        {value: 10, text: '10条/页', selected: true},
+                                        {value: 15, text: '15条/页'},
+                                        {value: 20, text: '20条/页'}
+                                    ],
+                                    callBack: function (currPage, pageSize) {
+                                        var eid = '${e.eid}';
+                                        loadDate_(eid, currPage, pageSize);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    layer.msg(result.msg)
+                }
+            }
+        });
+    }
+
+    function showContent(i) {
+        debugger;
+        var class_ = 'div.content_' + i;
+        var class_1 = 'h2.title_' + i;
+        var classContent = $(class_).css("display");
+        if (classContent == 'none') {
+            $(class_).css("display", "");
+        } else {
+            $(class_).css("display", "none");
+        }
+    }
+
+    function openEdit(aid) {
+        layer.open({
+            type: 2,
+            content: ['/answer/edit?aid=' + aid, 'no'],
+            area: ['970px', '740px'],
+            end: function () {
+                debugger;
+                $.ajax({
+                    url: "/answer/info",
+                    type: "post",
+                    data: {"eid": '${e.eid}'},
+                    success: function (info) {
+                        var result = JSON.parse(info);
+                        if (result.data == "true") {
+                            var list = result.lists;
+                            $("#lists").empty();
+                            for (var i = 0; i < list.length; i++) {
+                                var data = getFormatDate(list[i].passTime);
+                                var ans = list[i].agreeCount;
+                                if (list[i].agreeCount == null) {
+                                    ans = 0;
+                                }
+                                var temp = "";
+                                if (list[i].author == '${curUser.userName!}') {
+                                    temp = "<a class='layui-badge' style='float: right;margin-top: 4px' onclick='openEdit(" + list[i].aid + ")'>编辑</a>";
+                                }
+                                $("#lists").append("<li><a href='user/home.html'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2 class='title_" + i + "' onclick='showContent(" + i + ")'><a class='layui-badge'>问题</a><a>" + list[i].tittle + "</a>" + temp + "</h2><div class='fly-list-info'><a onclick='toHome(" + list[i].aid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span onclick='agree(" + list[i].aid + ")' class='fly-list-nums'>" +
+                                    "<i class='layui-icon layui-icon-praise' title='点赞'></i>" + ans + "</span></div></li>");
+                                $("#lists").append("<div id='answerContent' style='display: none' class='content_" + i + "'><div class='layui-row layui-col-md12' style='padding: 20px 0;'><h2 style='text-align: center;'>" + list[i].tittle + "</h2></div><div class='layui-row' style='padding: 20px 0;'><div class='layui-col-md4' style='text-align: center;margin-left: 150px'><label>作者:</label><span style='text-align: center'>" + list[i].author + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>发布时间:</label><span style='text-align: center'>" + data + "</span></div><div class='layui-col-md4' style='text-align: center;margin-left: -150px'><label>赞同数:</label><span style='text-align: center'>" + ans + "</span></div></div><hr/><div style='margin:0 0 0 170px; font-family:‘微软雅黑’,‘黑体’,‘宋体’;font-size:14px;padding-right: 157px'>" + list[i].content + "</div></div>")
+                            }
+                            $("#pagination_12").whjPaging({
+                                css: 'css-2',
+                                totalSize: result.pager.total,
+                                totalPage: result.pager.pages,
+                                // isShowSkip: false,
+                                isShowRefresh: false,
+                                pageSizeOpt: [
+                                    {value: 10, text: '10条/页', selected: true},
+                                    {value: 15, text: '15条/页'},
+                                    {value: 20, text: '20条/页'}
+                                ],
+                                callBack: function (currPage, pageSize) {
+                                    var eid = '${e.eid}';
+                                    loadDate_(eid, currPage, pageSize);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function collection_(eid) {
+        debugger;
+        var class_ = $("#collection").attr("class");
+        var isCollection = 1;
+        if (class_.indexOf("layui-icon-star-fill") != -1) {
+            isCollection = 0;
+        }
+        $.ajax({
+            url: "/exception/collection",
+            type: "post",
+            data: {"eid": eid, "isCollection": isCollection},
+            success: function (info) {
+                debugger;
+                var result = JSON.parse(info);
+                if (result.data == "true") {
+                    var class_ = $("#collection").attr("class");
+                    if (class_.indexOf("layui-icon-star-fill") == -1) {
+                        layer.msg("收藏帖子成功", {
+                            icon: 1,
+                            time: 2000,
+                        });
+                        $("i.layui-icon-star").addClass("layui-icon-star-fill");
+                        $("i.layui-icon-star").removeClass("layui-icon-star");
+                    } else {
+                        layer.msg("取消收藏成功", {
+                            icon: 1,
+                            time: 2000,
+                        });
+                        $("i.layui-icon-star-fill").addClass("layui-icon-star");
+                        $("i.layui-icon-star-fill").removeClass("layui-icon-star-fill");
+                    }
+                } else {
+                    layer.msg(result.msg, {icon: 5, anim: 6});
+                }
+            }
+        });
+    }
+
+    function html2Escape(sHtml) {
+        return sHtml.replace(/[<>&"]/g, function (c) {
+            return {'<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;'}[c];
+        });
+    }
 </script>
 </body>
 </html>

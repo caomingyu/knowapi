@@ -86,12 +86,58 @@ public class AnswerController {
     @PostMapping("/answer/add")
     @ResponseBody
     public Object answerAdd(String title, String content, Integer eid, Map<String, Object> map) {
-        if(answerService.insertAnswer(title, content, eid)){
-            map.put("data","true");
-            map.put("msg","新增成功");
-        }else{
-            map.put("data","false");
-            map.put("msg","新增失败");
+        if (answerService.insertAnswer(title, content, eid)) {
+            map.put("data", "true");
+            map.put("msg", "新增成功");
+        } else {
+            map.put("data", "false");
+            map.put("msg", "新增失败");
+        }
+        return JSON.toJSONString(map);
+    }
+
+    @PostMapping("/answer/info")
+    @ResponseBody
+    public Object showAnswer(Integer pageNum, Integer pageSize, Integer eid, Map<String, Object> map) {
+        List<AnswerInfo> answerInfos;
+        if (pageNum == null) {
+            pageNum = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        Page page = PageHelper.startPage(pageNum, pageSize);
+        answerInfos = answerService.findAnswerInfoListByEid(eid);
+        PageInfo info = new PageInfo<>(page.getResult());
+        map.put("data", "true");
+        map.put("lists", answerInfos);
+        map.put("pager", info);
+
+        return JSON.toJSONString(map);
+    }
+
+    @PostMapping("/answer/agreeUp")
+    @ResponseBody
+    public Object agreeUp(Integer aid, Map<String, Object> map) {
+        if (answerService.updateAgreeCountByAid(aid)) {
+            map.put("data", "true");
+            map.put("msg", "新增成功");
+        } else {
+            map.put("data", "false");
+            map.put("msg", "新增失败");
+        }
+        return JSON.toJSONString(map);
+    }
+
+    @PostMapping("/answer/update")
+    @ResponseBody
+    public Object updateAnswer(String title, String content, Integer aid, Map<String, Object> map) {
+        if (answerService.updateAnswer(title, content, aid)) {
+            map.put("data", "true");
+            map.put("msg", "新增成功");
+        } else {
+            map.put("data", "false");
+            map.put("msg", "新增失败");
         }
         return JSON.toJSONString(map);
     }

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.lang.Exception;
 import java.util.*;
 
 @Service
@@ -53,6 +52,20 @@ public class UserServiceImpl implements UserService {
             user.setRoleList(roleList);
         }
         return user;
+    }
+
+    @Override
+    @Cacheable(key = "'user_'+#uid", unless = "#result==null")
+    public User findUserById(Integer uid) {
+        User user = userMapper.selectByPrimaryKey(uid);
+        return user;
+    }
+
+    @Override
+    @Cacheable(key = "'uid_'+#eid",unless = "#result==null")
+    public Integer selectUidByEid(Integer eid) {
+        Integer uid=userMapper.selectUidByEid(eid);
+        return uid;
     }
 
     @Override

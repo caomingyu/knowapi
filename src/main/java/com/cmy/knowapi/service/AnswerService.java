@@ -15,5 +15,13 @@ public interface AnswerService {
 
     AnswerInfo findAnswerInfoById(Integer id);
 
-    boolean insertAnswer(String title,String content,Integer eid);
+    boolean insertAnswer(String title, String content, Integer eid);
+
+    List<AnswerInfo> findAnswerInfoListByEid(Integer eid);
+
+    boolean updateAgreeCountByAid(Integer aid);
+
+    AnswerInfo getAnswerInfo(Integer aid);
+
+    boolean updateAnswer(String title, String content, Integer aid);
 }

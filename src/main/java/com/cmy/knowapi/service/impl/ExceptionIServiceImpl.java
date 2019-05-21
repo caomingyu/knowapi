@@ -1,9 +1,6 @@
 package com.cmy.knowapi.service.impl;
 
-import com.cmy.knowapi.mapper.ExceptionInfoMapper;
-import com.cmy.knowapi.mapper.ExceptionMapper;
-import com.cmy.knowapi.mapper.ExceptionTypeMapper;
-import com.cmy.knowapi.mapper.SysFlowMapper;
+import com.cmy.knowapi.mapper.*;
 import com.cmy.knowapi.model.*;
 import com.cmy.knowapi.service.ExceptionService;
 import com.cmy.knowapi.service.UserService;
@@ -15,7 +12,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @CacheConfig(cacheNames = "userCache")
@@ -30,6 +30,9 @@ public class ExceptionIServiceImpl implements ExceptionService {
     SysFlowMapper flowMapper;
     @Autowired
     ExceptionTypeMapper typeMapper;
+    @Autowired
+    SysCollectionMapper collectionMapper;
+
 
     @Override
     public List<ExceptionInfo> findExceptionList() {
@@ -62,7 +65,9 @@ public class ExceptionIServiceImpl implements ExceptionService {
     @Override
     @Cacheable(key = "'exception_'+#id", unless = "#result==null")
     public ExceptionInfo findExceptionById(Integer id) {
-        return exceptionMapper.findExceptionById(SystemException.DELETE_STATE, id);
+        ExceptionInfo exceptionInfo = exceptionMapper.findExceptionById(SystemException.DELETE_STATE, id);
+//        exceptionInfo.setContent(HtmlUtils.htmlEscape(exceptionInfo.getContent()));
+        return exceptionInfo;
     }
 
     @Override
@@ -186,6 +191,13 @@ public class ExceptionIServiceImpl implements ExceptionService {
     @Override
     public List<ExceptionInfo> selectExceptionInfoByWeek() {
         List<ExceptionInfo> exceptionInfos = exceptionMapper.selectExceptionInfoByWeek(SystemException.NORMAL_STATE);
+        return exceptionInfos;
+    }
+
+    @Override
+    @Cacheable(key = "'collectionInfo_'+#uid", unless = "#result==null")
+    public List<ExceptionInfo> getCollectionByUid(Integer uid) {
+        List<ExceptionInfo> exceptionInfos = exceptionMapper.getCollectionByUid(SystemException.NORMAL_STATE, uid);
         return exceptionInfos;
     }
 }

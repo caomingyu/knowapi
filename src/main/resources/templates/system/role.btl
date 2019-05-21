@@ -1,0 +1,263 @@
+<%
+include("../common/_container.btl"){}
+%>
+<link rel="stylesheet" href="/module/dtree/dtree.css">
+<link rel="stylesheet" href="/module/dtree/font/dtreefont.css">
+<!--<script type="text/javascript" src="../../modular/system/role/role.js"></script>-->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">角色管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-col-md3 layui-card" style="margin-left: 20px;height: 600px">
+            <div class="layui-card">
+                <div class="layui-card-header">角色树</div>
+                <div class="layui-card-body mini-bar" id="toolbarDiv">
+                    <ul id="roleTree" class="dtree" data-id="0"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md1 layui-card" style="width: 40px"></div>
+        <div class="layui-col-md8">
+            <div class="layui-card" style="height: 20%">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="roleName" class="layui-input" type="text" placeholder="角色名"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i
+                                        class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card" style="height: 80%;margin-top: 30px">
+                <div class="layui-card-header">权限信息</div>
+                <div class="layui-card-body">
+                    <form class="layui-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">角色名称</label>
+                            <div class="layui-input-block">
+                                <input class="layui-input layui-disabled" id="role" type="text" name="name"
+                                       placeholder="角色名称" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">选择权限</label>
+                            <div class="layui-input-block" id="toolbarDiv1">
+                                <!--                                <div id="LAY-auth-tree-index"></div>-->
+                                <ul id="permissionTree" class="dtree" data-id="0"></ul>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" type="submit" lay-submit lay-filter="LAY-auth-tree-submit">
+                                    提交
+                                </button>
+                                <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery-3.4.0.min.js"></script>
+<script>
+    layui.config({
+        base: '/module/',
+    }).extend({
+        authtree: 'authtree',
+        dtree: 'dtree/dtree'
+    });
+    layui.use(['authtree', 'dtree', 'form', 'layer'], function () {
+        var dtree = layui.dtree;
+        var layer = layui.layer;
+        var authtree = layui.authtree;
+        var form = layui.form;
+        var RTree = dtree.render({
+            elem: "#roleTree",
+            url: "/json/role/tree",
+            dataFormat: "list",  //配置data的风格为list
+            checkbar: false, //开启复选框
+            initLevel: "1",
+            dot: false,
+            toolbar: true,
+            record: true,
+            toolbarScroll: "#toolbarDiv",
+            toolbarShow: ["add", "edit"],
+            toolbarBtn: [
+                [
+                    {"label": "角色名", "name": "title", "type": "text"},
+                    {"label": "描述", "name": "description", "type": "text"},
+                    {"value": "重置按钮", "name": "name6", "type": "reset"},
+                    {"value": "提交", "name": "name7", "type": "submit", "defElem": "btn"},
+                ],
+                [
+                    {"label": "角色名", "name": "title", "type": "text"},
+                    {"label": "描述", "name": "description", "type": "text"},
+                    {"value": "重置按钮", "name": "name6", "type": "reset"},
+                    {"value": "提交", "name": "name7", "type": "submit", "defElem": "btn"},
+                ]],
+            toolbarFun: {
+                addTreeNode: function (treeNode, $div) {
+                    $.ajax({
+                        type: "post",
+                        data: treeNode,
+                        url: "/DTreeHelper/toolbar/insert",
+                        success: function (result) {
+                            //DTree1.changeTreeNodeAdd(treeNode.nodeId); // 添加成功，返回ID
+                            //DTree1.changeTreeNodeAdd(true); // 添加成功
+                            //DTree1.changeTreeNodeAdd(result.data); // 添加成功，返回一个JSON对象
+                            //DTree1.changeTreeNodeAdd("refresh"); // 添加成功，局部刷新树
+                        },
+                        error: function () {
+                            //DTree1.changeTreeNodeAdd(false); // 添加失败
+                        }
+                    });
+                },
+                editTreeLoad: function (treeNode) {
+                    // 这里可以发送ajax请求，来获取参数值，最后将参数值以form能识别的键值对json的形式返回
+                    debugger;
+                    $.ajax({
+                        url: "/json/role/info",
+                        type: "post",
+                        data: {"rid": treeNode.nodeId},
+                        success: function (info) {
+                            var result = JSON.parse(info);
+                            var param = result.data;
+                            var paramJson = JSON.parse(param);
+                            RTree.changeTreeNodeDone(paramJson);
+                        }
+                    })
+                },
+                editTreeNode: function (treeNode, $div) {
+                    $.ajax({
+                        type: "post",
+                        data: treeNode,
+                        url: "/DTreeHelper/toolbar/update",
+                        success: function (result) {
+                            //DTree1.changeTreeNodeEdit(true);// 修改成功
+                            //DTree1.changeTreeNodeEdit(result.param); // 修改成功，返回一个JSON对象
+                        },
+                        error: function () {
+                            //DTree1.changeTreeNodeEdit(false);//修改失败
+                        }
+                    });
+                }
+            }
+        });
+        dtree.on("node('roleTree')", function (obj) {
+            console.log(obj.param); // 点击当前节点传递的参数
+            $("#roleName").val(obj.param.context);
+            $("#role").val(obj.param.context);
+
+            dtree.reload("permissionTree",{
+                url: "/permission/tree/byRole?rid="+obj.param.nodeId,
+                method: "get", //默认为post
+                initLevel: "1" //默认为2
+            });
+        });
+
+        $("#btnSearch").click(function () {
+            debugger;
+            var context = $("#roleName").val();
+            $.ajax({
+                url: "/role/get/description",
+                type: "post",
+                data: {"description": context},
+                success: function (info) {
+                    var result = JSON.parse(info);
+                    if (result.data == "true") {
+                        var nodeId = result.role.id;
+                        // dtree.click(RTree, nodeId);
+                        RTree.dataInit(nodeId);
+                        dtree.click(RTree, nodeId);
+                    }
+                }
+            });
+        })
+
+        var PTree = dtree.render({
+            elem: "#permissionTree",
+            url: "/permission/tree",
+            dataFormat: "list",  //配置data的风格为list
+            checkbar: true, //开启复选框
+            checkbarType: "no-all",
+            initLevel: "1",
+            dot: false,
+            toolbar: true,
+            record: true,
+            toolbarScroll: "#toolbarDiv1",
+            toolbarShow: ["add", "edit"],
+            toolbarBtn: [
+                [
+                    {"label": "权限名", "name": "title", "type": "text"},
+                    {"label": "描述", "name": "description", "type": "text"},
+                    {"value": "重置按钮", "name": "name6", "type": "reset"},
+                    {"value": "提交", "name": "name7", "type": "submit", "defElem": "btn"},
+                ],
+                [
+                    {"label": "权限名", "name": "title", "type": "text"},
+                    {"label": "描述", "name": "description", "type": "text"},
+                    {"value": "重置按钮", "name": "name6", "type": "reset"},
+                    {"value": "提交", "name": "name7", "type": "submit", "defElem": "btn"},
+                ]],
+            toolbarFun: {
+                addTreeNode: function (treeNode, $div) {
+                    $.ajax({
+                        type: "post",
+                        data: treeNode,
+                        url: "/DTreeHelper/toolbar/insert",
+                        success: function (result) {
+                            //DTree1.changeTreeNodeAdd(treeNode.nodeId); // 添加成功，返回ID
+                            //DTree1.changeTreeNodeAdd(true); // 添加成功
+                            //DTree1.changeTreeNodeAdd(result.data); // 添加成功，返回一个JSON对象
+                            //DTree1.changeTreeNodeAdd("refresh"); // 添加成功，局部刷新树
+                        },
+                        error: function () {
+                            //DTree1.changeTreeNodeAdd(false); // 添加失败
+                        }
+                    });
+                },
+                editTreeLoad: function (treeNode) {
+                    // 这里可以发送ajax请求，来获取参数值，最后将参数值以form能识别的键值对json的形式返回
+                    debugger;
+                    $.ajax({
+                        url: "/json/permission/info",
+                        type: "post",
+                        data: {"pid": treeNode.nodeId},
+                        success: function (info) {
+                            var result = JSON.parse(info);
+                            var param = result.data;
+                            var paramJson = JSON.parse(param);
+                            PTree.changeTreeNodeDone(paramJson);
+                        }
+                    })
+                },
+                editTreeNode: function (treeNode, $div) {
+                    $.ajax({
+                        type: "post",
+                        data: treeNode,
+                        url: "/DTreeHelper/toolbar/update",
+                        success: function (result) {
+                            //DTree1.changeTreeNodeEdit(true);// 修改成功
+                            //DTree1.changeTreeNodeEdit(result.param); // 修改成功，返回一个JSON对象
+                        },
+                        error: function () {
+                            //DTree1.changeTreeNodeEdit(false);//修改失败
+                        }
+                    });
+                }
+            }
+        });
+    })
+</script>
+
