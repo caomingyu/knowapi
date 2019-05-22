@@ -1,7 +1,9 @@
 package com.cmy.knowapi.service;
 
+import com.cmy.knowapi.model.Permission;
 import com.cmy.knowapi.model.Role;
 
+import java.util.List;
 import java.util.Map;
 
 public interface RoleService {
@@ -22,4 +24,6 @@ public interface RoleService {
     String getPermissionInfo(Integer pid);
 
     String getPermissionTree(Integer rid);
+
+    boolean updateRolePermission(Integer rid,List<Permission>permissions);
 }

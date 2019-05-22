@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -166,5 +167,18 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         return false;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateRolePermission(Integer rid, List<Permission> permissions) {
+        Example example=new Example(Permission.class);
+        example.createCriteria().andEqualTo("id");
+        permissionMapper.deleteByRid(rid);
+        for (Permission permission:permissions){
+            Integer pid=permission.getId();
+            permissionMapper.insertRoleAndPermission(rid,pid);
+        }
+        return true;
     }
 }
