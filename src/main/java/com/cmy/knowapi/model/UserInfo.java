@@ -25,6 +25,7 @@ public class UserInfo {
     private Date birthDay;
     @Column(name = "phone")
     private String phone;
+    private String avatar;
 
     @Column(name = "answerNum")
     private Integer answerNum;

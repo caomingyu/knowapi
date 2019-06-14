@@ -8,6 +8,7 @@ import com.cmy.knowapi.service.MenuService;
 import com.cmy.knowapi.service.RoleService;
 import com.cmy.knowapi.service.UserService;
 import com.cmy.knowapi.util.Md5Util;
+import com.cmy.util.OSSOperate;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,14 @@ public class UserServiceImpl implements UserService {
         Example example = new Example(User.class);
         example.createCriteria().andEqualTo("userName", userName);
         User user = userMapper.selectOneByExample(example);
+        String avatar = "default_handsome.jpg";
+        Integer udid = userInfoMapper.selectUdidByUid(user.getId());
+        if (udid != null && "".equals(udid)) {
+            UserInfo userInfo = userInfoMapper.selectByPrimaryKey(udid);
+            avatar = userInfo.getAvatar();
+        }
+        user.setAvatar(OSSOperate.getSafeURL(avatar).toString());
+
         if (user != null) {
             List<Role> roleList = userMapper.findRole(user.getId());
             Iterator<Role> it = roleList.iterator();
@@ -62,9 +71,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(key = "'uid_'+#eid",unless = "#result==null")
+    @Cacheable(key = "'uid_'+#eid", unless = "#result==null")
     public Integer selectUidByEid(Integer eid) {
-        Integer uid=userMapper.selectUidByEid(eid);
+        Integer uid = userMapper.selectUidByEid(eid);
         return uid;
     }
 

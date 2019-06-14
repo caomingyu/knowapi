@@ -35,4 +35,6 @@ public class User {
     public String getCredentialsSalt() {
         return this.userName + this.salt;
     }
+    @Transient
+    private String avatar;
 }

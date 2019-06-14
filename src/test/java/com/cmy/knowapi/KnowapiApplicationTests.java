@@ -6,8 +6,8 @@ import com.cmy.knowapi.mapper.UserMapper;
 import com.cmy.knowapi.model.Permission;
 import com.cmy.knowapi.model.Role;
 import com.cmy.knowapi.model.User;
-import com.cmy.knowapi.service.TestService;
 import com.cmy.knowapi.service.UserService;
+import com.cmy.util.OSSOperate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -20,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
@@ -110,12 +112,26 @@ public class KnowapiApplicationTests {
         log.info(user.toString() + "");
     }
 
-    @Autowired
-    TestService testService;
 
     @Test
-    public void tets() {
-        testService.testIn();
+    public void tets() throws FileNotFoundException {
+        File file = new File("src/main/resources/application.yml");
+        System.out.println(OSSOperate.uploadFile(file));
     }
+
+    @Test
+    public void testUrl() {
+        String key = "default_handsome.jpg";
+        URL url=OSSOperate.getSafeURL(key);
+        System.out.println(url);
+        System.out.println(url.toString());
+//        OSSConfigue ossConfigue=new OSSConfigue();
+//        OSSClient ossClient = new OSSClient(ossConfigue.getEndpoint(), ossConfigue.getAccessKeyId(), ossConfigue.getAccessKeySecret());
+//
+//        Date expiration = new Date(new Date().getTime() + 3600*1000);
+//        URL url = ossClient.generatePresignedUrl(ossConfigue.getBucketName(), "FLAMING MOUNTAIN.JPG", expiration);
+//        System.out.println(url);
+    }
+
 }
 

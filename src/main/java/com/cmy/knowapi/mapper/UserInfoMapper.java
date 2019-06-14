@@ -25,6 +25,6 @@ public interface UserInfoMapper extends MyMapper<UserInfo> {
     @Select("select udid from sys_user_userdetail where uid=#{uid}")
     Integer selectUdidByUid(@Param("uid") Integer uid);
 
-    @Select("SELECT u.id as uid,u.username as account ,d.id as id,d.name as name,d.sex as sex,d.email as email,d.phone as phone,u.state as state,d.answerNum FROM sys_user as u LEFT JOIN sys_user_userdetail as ud ON ud.uid=u.id LEFT JOIN sys_user_detail as d ON d.id=ud.udid where state=#{state} order by answerNum desc LIMIT 10")
+    @Select("SELECT u.id as uid,u.username as account ,d.id as id,d.name as name,d.sex as sex,d.email as email,d.phone as phone,u.state as state,d.answerNum,d.avatar FROM sys_user as u LEFT JOIN sys_user_userdetail as ud ON ud.uid=u.id LEFT JOIN sys_user_detail as d ON d.id=ud.udid where state=#{state} order by answerNum desc LIMIT 10")
     List<UserInfo> selectUserInfoByAnswerNum(@Param("state") Integer state);
 }

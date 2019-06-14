@@ -5,6 +5,7 @@ import com.cmy.knowapi.mapper.UserInfoMapper;
 import com.cmy.knowapi.model.User;
 import com.cmy.knowapi.model.UserInfo;
 import com.cmy.knowapi.service.UserService;
+import com.cmy.util.OSSOperate;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -114,6 +115,13 @@ public class UserController {
     @ResponseBody
     public Object userAnswerNum(Map<String, Object> map) {
         List<UserInfo> userInfos = userService.selectUserInfoByAnswerNum();
+        String avatar = "default_handsome.jpg";
+        for (UserInfo userInfo : userInfos) {
+            if (null != userInfo.getAvatar() && !"".equals(userInfo.getAvatar())) {
+                avatar = userInfo.getAvatar();
+            }
+            userInfo.setAvatar(OSSOperate.getSafeURL(avatar).toString());
+        }
         map.put("data", "true");
         map.put("list", userInfos);
         return JSON.toJSONString(map);

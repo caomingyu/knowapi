@@ -37,7 +37,7 @@
             <li class="layui-nav-item">
                 <a class="fly-nav-avatar" href="javascript:;">
                     <cite class="layui-hide-xs">${curUser.userName}</cite>
-                    <img src="../images/head.png">
+                    <img src="${curUser.avatar}">
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="/face/user/set"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
@@ -199,7 +199,10 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#LAY_replyRank").append("<dd><a href='user/home?uid=" + list[i].uid + "'><img src='/images/head/head_1.jpg'><cite" + list[i].account + "</cite><i>" + ans + "次回答</i></a></dd>")
+                    /**
+                     * /images/head/head_1.jpg
+                     */
+                    $("#LAY_replyRank").append("<dd><a href='user/home?uid=" + list[i].uid + "'><img src='"+list[i].avatar+"'><cite" + list[i].account + "</cite><i>" + ans + "次回答</i></a></dd>")
                 }
                 $("#LAY_replyRank").append("</dl>");
             }
@@ -223,7 +226,7 @@
                 if (list[i].answerCount == null) {
                     ans = 0;
                 }
-                $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                     "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                     "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
             }
@@ -280,7 +283,7 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
                 }
@@ -317,7 +320,7 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
                 }
@@ -370,7 +373,7 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
                 }
@@ -425,7 +428,7 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
                 }
@@ -480,7 +483,7 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
                 }
@@ -534,7 +537,7 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
                 }
@@ -570,7 +573,7 @@
         $(".fly-mid").hide();
         $("#lists").empty();
         for (var i = 0; i < 5; i++) {
-            $("#lists").append("<li><a href='user/home?uid=1'class='fly-avatar'><img src='/images/head/head_.png' alt='" + "zz" + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + "1" +
+            $("#lists").append("<li><a href='user/home?uid=1'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + "zz" + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + "1" +
                 "'>" + "公告内容-----------" + i + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + "1" + ")' link><cite>" + "管理员" + "</cite></a><span>" + "2019-05-14" + "</span>" +
                 "</div></li>");
         }
@@ -613,7 +616,7 @@
                     if (list[i].answerCount == null) {
                         ans = 0;
                     }
-                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='/images/head/head_.png' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
+                    $("#lists").append("<li><a href='user/home?eid=" + list[i].eid + "'class='fly-avatar'><img src='"+list[i].avatar+"' alt='" + list[i].author + "''></a><h2><a class='layui-badge'>问题</a><a href='/exception/show?eid=" + list[i].eid +
                         "'>" + list[i].title + "</a></h2><div class='fly-list-info'><a onclick='toHome(" + list[i].eid + ")' link><cite>" + list[i].author + "</cite></a><span>" + data + "</span><span class='fly-list-nums'>" +
                         "<i class='iconfont icon-pinglun1' title='回答'></i>" + ans + "</span></div></li>");
                 }

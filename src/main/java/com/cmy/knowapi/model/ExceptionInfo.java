@@ -43,4 +43,6 @@ public class ExceptionInfo {
     private Double similasrity;
     @Transient
     private List<AnswerInfo> answerInfoList;
+    @Transient
+    private String avatar;
 }

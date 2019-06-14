@@ -3,6 +3,7 @@ package com.cmy.knowapi.controller;
 import com.alibaba.fastjson.JSON;
 import com.cmy.knowapi.model.*;
 import com.cmy.knowapi.service.*;
+import com.cmy.util.OSSOperate;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -157,6 +159,14 @@ public class SystemController {
         Page page = PageHelper.startPage(pageNum, pageSize);
         exceptionInfos = exceptionService.findExceptionListOrderBy(orderBy, finish);
         PageInfo info = new PageInfo<>(page.getResult());
+        String avatar = "default_handsome.jpg";
+        for (ExceptionInfo exceptionInfo : exceptionInfos) {
+            if ("".equals(exceptionInfo.getAvatar())) {
+                exceptionInfo.setAvatar(avatar);
+            }
+            URL url= OSSOperate.getSafeURL(exceptionInfo.getAvatar());
+            exceptionInfo.setAvatar(url.toString());
+        }
         map.put("list", exceptionInfos);
         map.put("pager", info);
         map.put("code", 0);
