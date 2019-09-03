@@ -8,7 +8,7 @@ import com.cmy.knowapi.service.MenuService;
 import com.cmy.knowapi.service.RoleService;
 import com.cmy.knowapi.service.UserService;
 import com.cmy.knowapi.util.Md5Util;
-import com.cmy.util.OSSOperate;
+import com.cmy.ossutil.util.OssUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
+
+//import com.cmy.util.OSSOperate;
 
 @Service
 @CacheConfig(cacheNames = "userCache")
@@ -46,7 +48,7 @@ public class UserServiceImpl implements UserService {
             UserInfo userInfo = userInfoMapper.selectByPrimaryKey(udid);
             avatar = userInfo.getAvatar();
         }
-        user.setAvatar(OSSOperate.getSafeURL(avatar).toString());
+        user.setAvatar(OssUtil.getImgUrl(avatar));
 
         if (user != null) {
             List<Role> roleList = userMapper.findRole(user.getId());

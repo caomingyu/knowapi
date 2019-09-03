@@ -144,11 +144,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.9</version>
         </dependency>
-        <dependency>
-            <groupId>com.cmy</groupId>
-            <artifactId>my-oss-operation</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+                <dependency>
+                    <groupId>com.cmy</groupId>
+                    <artifactId>ossutil</artifactId>
+                    <version>0.0.1-SNAPSHOT</version>
+                </dependency>
     </dependencies>
 
     <build>
@@ -182,6 +182,28 @@
                 </configuration>
             </plugin>
         </plugins>
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src\main\resources</directory> &lt;!&ndash;配置文件路径&ndash;&gt;-->
+<!--                <excludes>-->
+<!--                    <exclude>logback-spring.xml</exclude> &lt;!&ndash;要排除的配置文件名&ndash;&gt;-->
+<!--                    <exclude>application.yml</exclude>-->
+<!--                    <exclude>application-pro.yml</exclude>-->
+<!--                </excludes>-->
+<!--            </resource>-->
+<!--        </resources>-->
     </build>
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://39.96.222.232:8085/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://39.96.222.232:8085/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

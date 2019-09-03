@@ -3,7 +3,7 @@ package com.cmy.knowapi.controller;
 import com.alibaba.fastjson.JSON;
 import com.cmy.knowapi.model.*;
 import com.cmy.knowapi.service.*;
-import com.cmy.util.OSSOperate;
+import com.cmy.ossutil.util.OssUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
+//import com.cmy.util.OSSOperate;
 
 @Controller
 public class SystemController {
@@ -164,8 +165,7 @@ public class SystemController {
             if ("".equals(exceptionInfo.getAvatar())) {
                 exceptionInfo.setAvatar(avatar);
             }
-            URL url= OSSOperate.getSafeURL(exceptionInfo.getAvatar());
-            exceptionInfo.setAvatar(url.toString());
+            exceptionInfo.setAvatar(OssUtil.getImgUrl(avatar));
         }
         map.put("list", exceptionInfos);
         map.put("pager", info);

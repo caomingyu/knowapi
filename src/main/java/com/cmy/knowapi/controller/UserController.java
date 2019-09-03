@@ -5,7 +5,8 @@ import com.cmy.knowapi.mapper.UserInfoMapper;
 import com.cmy.knowapi.model.User;
 import com.cmy.knowapi.model.UserInfo;
 import com.cmy.knowapi.service.UserService;
-import com.cmy.util.OSSOperate;
+//import com.cmy.util.OSSOperate;
+import com.cmy.ossutil.util.OssUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -120,7 +121,7 @@ public class UserController {
             if (null != userInfo.getAvatar() && !"".equals(userInfo.getAvatar())) {
                 avatar = userInfo.getAvatar();
             }
-            userInfo.setAvatar(OSSOperate.getSafeURL(avatar).toString());
+            userInfo.setAvatar(OssUtil.getImgUrl(avatar));
         }
         map.put("data", "true");
         map.put("list", userInfos);
